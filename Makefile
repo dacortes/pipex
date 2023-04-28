@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/04/28 17:08:53 by dacortes         ###   ########.fr        #
+#    Updated: 2023/04/28 17:11:40 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ $(D_OBJ)/%.o:$(L_SRC)/%.c
 	@$(CC) -MMD $(FLAGS) -c $< -o $@ $(INC)
 $(NAME): $(OBJ)
 	@$(CC) $(FLAGS) $(OBJ) $(L_LIB) -o $(NAME) $(INC)
-	@echo  "\n$(B)$(ligth)-->$(G) ==== Project push swap compiled! ==== ✅$(E)"
+	@echo  "\n$(B)$(ligth)-->$(G) ==== Project pipex compiled! ==== ✅$(E)"
 
 # ========================== CLEAN   ===================================== #
 
