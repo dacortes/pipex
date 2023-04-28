@@ -6,9 +6,11 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:04 by dacortes          #+#    #+#             */
-/*   Updated: 2023/04/28 17:09:25 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/04/28 17:15:01 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include"../inc/pipex.h"
 
 int	main(void)
 {

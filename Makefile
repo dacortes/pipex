@@ -6,13 +6,13 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/04/28 17:11:40 by dacortes         ###   ########.fr        #
+#    Updated: 2023/04/28 17:13:17 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # =============================== VARIABLES ================================== #
 
-NAME = push_swap
+NAME = pipex
 CC = gcc
 RM = rm -rf
 LIBC = ar -rcs
