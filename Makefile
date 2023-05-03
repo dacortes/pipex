@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/04/28 17:13:17 by dacortes         ###   ########.fr        #
+#    Updated: 2023/05/03 12:44:44 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ FLAGS = -Wall -Wextra -Werror -g
 
 # =========================== SOURCES ======================================== #
 
-SRC = main.c
+SRC = utils.c\
+main.c
 LIBFT = ./libft/
 L_SRC = ./src
 L_LIB = ./libft/libft.a
