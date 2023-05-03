@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:08 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/03 15:44:00 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/03 16:13:10 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,24 @@ int	find_command(char *command, char **env)
 	path = find_path(env);
 	if (!path)
 		return (FALSE);
-	split = ft_split(path, ':');
+	int i = 0;
+	while (path[i])
+	{
+		i++;
+		if (path[i] == ':')
+			break ;
+	}
+	i++;
+	char	*add;
+	int		j = 0;
+
+	add = ft_calloc(sizeof(char), (ft_strlen(path) - i) + 1);
+	if (!add)
+		return (FALSE);
+	while (path[i])
+		add[j++] = path[i++];
+	ft_printf(G"%s\n"E, add);
+	split = ft_split(add, ':');
 	if (!split)
 	{
 		perror(E_MEMO);
@@ -60,5 +77,6 @@ int	find_command(char *command, char **env)
 	}
 	ft_printf(R"%s\n"E, split[0]);
 	free_split(split);
+	free(add);
 	return (TRUE);
 }
