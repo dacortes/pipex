@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 10:59:54 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/05 09:02:04 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/05 11:03:09 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,53 +31,103 @@ char	*find_path(char **env)
 	}
 	return (path);
 }
-// void	axu_find_com(char *command, t_f_com *parse)
-// {
-
-// }
-char	*find_command(char *command, char **env)
+int	axu_find_com(char *command, t_f_com *parse)
 {
-	t_f_com parse;
-
-	parse.path = find_path(env);
-	if (!parse.path)
-		return (NULL);
-	parse.i = 0;
-	while (parse.path[parse.i])
+	parse->i = 0;
+	while (parse->split[parse->i])
 	{
-		parse.i++;
-		if (parse.path[parse.i] == ':')
+		parse->join = ft_strjoin(parse->split[parse->i++], command);
+		if (!parse->join)
+			return (ERROR);
+		if (access(parse->join, F_OK) != ERROR)
 			break ;
+		free(parse->join);
 	}
-	parse.i++;
-	parse.add = ft_calloc(sizeof(char), (ft_strlen(parse.path) - parse.i) + 1);
-	if (!parse.add)
-		return (NULL);
-	parse.axu_i = 0;
-	while (parse.path[parse.i])
-		parse.add[parse.axu_i++] = parse.path[parse.i++];
-	parse.split = ft_split(parse.add, ':');
-	if (!parse.split)
-		return (NULL);
-	parse.i = 0;
-	while (parse.split[parse.i])
+	parse->path = parse->join;
+	free_split(parse->split);
+	if (access(parse->join, F_OK) != ERROR)
 	{
-		parse.join = ft_strjoin(parse.split[parse.i++], command);
-		if (!parse.join)
-			return (NULL);
-		if (access(parse.join, F_OK) != ERROR)
-			break ;
-		free(parse.join);
+		free(parse->join);
+		parse->error = TRUE;
 	}
-	parse.path = parse.join;
-	free_split(parse.split);
-	if (access(parse.join, F_OK) != ERROR)
-		free(parse.join);
 	else
 	{
-		parse.path = NULL;
-		//parse
+		parse->path = NULL;
+		parse->error = FALSE;
 	}
-	free(parse.add);
-	return (parse.path);
+	free(parse->add);
+	return (SUCCESS);
+}
+// char	*find_command(char *command, char **env, t_f_com *parse)
+// {
+// 	parse->path = find_path(env);
+// 	if (!parse->path)
+// 		return (NULL);
+// 	parse->i = 0;
+// 	while (parse->path[parse->i])
+// 	{
+// 		parse->i++;
+// 		if (parse->path[parse->i] == ':')
+// 			break ;
+// 	}
+// 	parse->i++;
+// 	parse->add = ft_calloc(sizeof(char), (ft_strlen(parse->path) - parse->i) + 1);
+// 	if (!parse->add)
+// 		return (NULL);
+// 	parse->axu_i = 0;
+// 	while (parse->path[parse->i])
+// 		parse->add[parse->axu_i++] = parse->path[parse->i++];
+// 	parse->split = ft_split(parse->add, ':');
+// 	if (!parse->split)
+// 		return (NULL);
+// 	parse->i = 0;
+// 	while (parse->split[parse->i])
+// 	{
+// 		parse->join = ft_strjoin(parse->split[parse->i++], command);
+// 		if (!parse->join)
+// 			return (NULL);
+// 		if (access(parse->join, F_OK) != ERROR)
+// 			break ;
+// 		free(parse->join);
+// 	}
+// 	parse->path = parse->join;
+// 	free_split(parse->split);
+// 	if (access(parse->join, F_OK) != ERROR)
+// 	{
+// 		free(parse->join);
+// 		parse->error = TRUE;
+// 	}
+// 	else
+// 	{
+// 		parse->path = NULL;
+// 		parse->error = FALSE;
+// 	}
+// 	free(parse->add);
+// 	return (parse->path);
+// }
+int	find_command(char *command, char **env, t_f_com *parse)
+{
+	parse->path = find_path(env);
+	if (!parse->path)
+		return (ERROR);
+	parse->i = 0;
+	while (parse->path[parse->i])
+	{
+		parse->i++;
+		if (parse->path[parse->i] == ':')
+			break ;
+	}
+	parse->i++;
+	parse->add = ft_calloc(sizeof(char), (ft_strlen(parse->path) - parse->i) + 1);
+	if (!parse->add)
+		return (ERROR);
+	parse->axu_i = 0;
+	while (parse->path[parse->i])
+		parse->add[parse->axu_i++] = parse->path[parse->i++];
+	parse->split = ft_split(parse->add, ':');
+	if (!parse->split)
+		return (ERROR);
+	if (axu_find_com(command, parse) == ERROR)
+		return (ERROR);
+	return (SUCCESS);
 }

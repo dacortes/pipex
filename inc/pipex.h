@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/05 08:55:46 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/05 11:03:18 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_f_com
 
 /* find_command/find_command */
 char	*find_path(char **env);
-char	*find_command(char *command, char **env);
+int		find_command(char *command, char **env, t_f_com *parse);
 /* scr/utils.c */
 void	free_split(char **split);
 #endif
