@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/05 11:03:18 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/05 14:10:45 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@
 # define E_EXIT  1
 
 /* Errors */
-# define E_MEMO "memory allocation error"
+# define E_MEMO "Memory allocation error"
 # define E_PATH "Path not found"
 # define E_COMN "Command not found"
+# define E_PERM "Permissions denied"
+# define E_NARC "number of invalid arguments"
 
 // ================================= COLORS ================================= //
 
@@ -53,13 +55,15 @@ typedef struct s_f_com
 	char	*join;
 	int		i;
 	int		axu_i;
-	int		error;
+	int		f_ok;
 }	t_f_com;
 
 
 // ================================= FUNCTIONS ============================== //
 
-/* find_command/find_command */
+/* command/check_permissions.c */
+int		check_perissions(t_f_com *parse);
+/* command/find_command.c */
 char	*find_path(char **env);
 int		find_command(char *command, char **env, t_f_com *parse);
 /* scr/utils.c */

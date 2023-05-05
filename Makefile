@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/05/04 11:02:40 by dacortes         ###   ########.fr        #
+#    Updated: 2023/05/05 12:04:36 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ FLAGS = -Wall -Wextra -Werror -g
 
 # =========================== SOURCES ======================================== #
 
-SRC = find_command/find_command.c\
+SRC = command/check_permissions.c command/find_command.c\
 utils.c\
 main.c
 LIBFT = ./libft/
@@ -55,7 +55,7 @@ all: dir $(NAME)
 dir:
 	@make bonus -C $(LIBFT)
 	@mkdir -p $(D_OBJ)
-	@mkdir -p $(D_OBJ)/find_command
+	@mkdir -p $(D_OBJ)/command
 $(D_OBJ)/%.o:$(L_SRC)/%.c
 	@printf "$(ligth)$(Y)\r$@...$(E)"
 	@$(CC) -MMD $(FLAGS) -c $< -o $@ $(INC)
