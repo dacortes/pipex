@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 10:59:54 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/05 12:20:30 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/08 13:10:52 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ char	*find_path(char **env)
 	int		i;
 
 	i = 0;
+	path = NULL;
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], "PATH", 4) == 0)

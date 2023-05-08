@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/05 14:10:45 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/08 16:55:12 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 
 // ================================= MACROS ================================= //
 
+/* Utils */
+# define D_QUOTES	34
+# define S_QUOTES	39
 /* Outputs */
 # define SUCCESS 0
 # define FALSE	 0
@@ -57,6 +60,17 @@ typedef struct s_f_com
 	int		axu_i;
 	int		f_ok;
 }	t_f_com;
+
+/* structure main */
+
+typedef struct s_pipex
+{
+	char	**n_com;
+	char	*in_file;
+	char	*out_file;
+	char	**split;
+}	t_pipex;
+
 
 
 // ================================= FUNCTIONS ============================== //
