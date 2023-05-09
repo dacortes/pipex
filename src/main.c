@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:04 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/08 20:05:39 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/09 11:13:44 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,75 +66,7 @@
 // 	return (SUCCESS);
 // }
 
-// void	init_struc(t_f_com *parse)
-// {
-// 	parse->split = NULL;
-// 	parse->path = NULL;
-// 	parse->add = NULL;
-// 	parse->join = NULL;
-// 	parse->i = 0;
-// 	parse->axu_i = 0;
-// 	parse->f_ok= 0;
-// }
-
-// int	main(int ac, char **av, char **env)
-// {
-// 	(void)env;
-// 	t_pipex	p;
-// 	t_f_com parse;
-// 	int		i;
-
-// 	if (ac != 5)
-// 	{
-// 		perror(E_NARC);
-// 		exit (ERROR);
-// 	}
-// 	p.n_com = ft_calloc(sizeof(char *), ac - 2);
-// 	if (!p.n_com)
-// 	{
-// 		perror(E_MEMO);
-// 		return (ERROR);
-// 	}
-// 	init_struc(&parse);
-// 	i = 1;
-// 	while (av[i++] && i < ac -1)
-// 		p.n_com[i - 2] = av[i];
-// 	p.in_file = av[1];
-// 	p.out_file = av[ac - 1];
-// 	ft_printf("%s%s%s%s\n", "In file: ", B, p.in_file, E);
-// 	ft_printf("%s%s%s%s\n", "Command1: ", B, p.out_file, E);
-// 	ft_printf("%s%s%s%s\n", "Command2: ", B, p.n_com[0], E);
-// 	ft_printf("%s%s%s%s\n", "Out file: ", B, p.n_com[1], E);
-// 	ft_printf("%s%s%s\n", G, "Aply split", E);
-// 	i = 0;
-// 	int j = 0;
-// 	int c = 0;
-// 	char *command;
-// 	while (p.n_com[i])
-// 	{
-// 		j = 0;
-// 		while (p.n_com[i][j] && p.n_com[i][j] != D_QUOTES
-// 			&& p.n_com[i][j] != ' ')
-// 			j++;
-// 		command = ft_calloc(sizeof(char), j + 1);
-// 		if (!command)
-// 		{
-// 			perror(E_MEMO);
-// 			return (ERROR);
-// 		}
-// 		j = 0;
-// 		while (p.n_com[i][j] && p.n_com[i][j] != D_QUOTES
-// 			&& p.n_com[i][j] != ' ')
-// 			command[c] = p.n_com[i][j++];
-// 		ft_printf(R"%s\n"E, command);
-// 		free(command);
-// 		i++;
-// 	}
-// 	free(p.n_com);
-// 	return (SUCCESS);
-// }
-
-int	are_there_quotes(char *command)
+void	are_there_quotes(char *command, int *d_quotes, int *s_quotes)
 {
 	int i;
 
@@ -143,13 +75,16 @@ int	are_there_quotes(char *command)
 	{
 		if (command[i] == D_QUOTES)
 		{
-			return (TRUE);
-			break ;
+			(*d_quotes)++;
+		}
+		else if (command[i] == S_QUOTES)
+		{
+			(*s_quotes)++;
 		}
 		i++;
 	}
-	return (FALSE);
 }
+
 void	word_count(int *space, int *word, char *command)
 {
 	int i;
@@ -185,18 +120,30 @@ int	main(int ac, char **av)
 	char	*com2 = av[3];
 	char	*o_file = av[4];
 	
+	/* parseo */
+	int		space = 0;
+	int		word = 0;
+	int		d_quotes = 0;
+	int		s_quotes = 0;
 	ft_printf("%s%s%s%s\n", "in file: ", B, i_file, E);
 	ft_printf("%s%s%s%s\n", "command1: ", B, com1, E);
 	ft_printf("%s%s%s%s\n", "command2: ", B, com2, E);
 	ft_printf("%s%s%s%s\n", "out file: ", B, o_file, E);
-	if (are_there_quotes(com1))
-		ft_printf("status com1: %s%s%s\n", G, "OK", E);
+	/* find  quotes */
+	are_there_quotes(com1, &d_quotes, &s_quotes);
+	ft_printf("%sdouble quotes:%s %d\n", Y, E, d_quotes);
+	ft_printf("%ssingle quotes:%s %d\n", Y, E, s_quotes);
+	d_quotes = 0;
+	s_quotes = 0;
+	are_there_quotes(com2, &d_quotes, &s_quotes);
+	ft_printf("%sdouble quotes:%s %d\n", Y, E, d_quotes);
+	ft_printf("%ssingle quotes:%s %d\n", Y, E, s_quotes);
+	/* word count */
+	word_count(&space, &word, com1);
+	if (space)
+		ft_printf("%sTRUE%s\n", B, E);
 	else
-		ft_printf("status com1: %s%s%s\n", R, "KO", E);
-	if (are_there_quotes(com2))
-		ft_printf("status com1: %s%s%s\n", G, "OK", E);
-	else
-		ft_printf("status com1: %s%s%s\n", R, "KO", E);
-
+		ft_printf("%sFALSE%s\n", B, E);
+	ft_printf("%scount words:%s %d\n", Y, E, word);
 	return (SUCCESS);
 }
