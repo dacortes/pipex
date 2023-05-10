@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/08 16:55:12 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/10 09:05:09 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 
 /* Utils */
 # define D_QUOTES	34
-# define S_QUOTES	39
 /* Outputs */
 # define SUCCESS 0
 # define FALSE	 0
@@ -61,15 +60,16 @@ typedef struct s_f_com
 	int		f_ok;
 }	t_f_com;
 
-/* structure main */
+/* structure parse command */
 
-typedef struct s_pipex
+typedef struct s_parse
 {
-	char	**n_com;
-	char	*in_file;
-	char	*out_file;
 	char	**split;
-}	t_pipex;
+	char	**argv;
+	char	*command;
+	int		qoutes;
+	int		i;
+}	t_parse;
 
 
 
@@ -78,8 +78,9 @@ typedef struct s_pipex
 /* command/check_permissions.c */
 int		check_perissions(t_f_com *parse);
 /* command/find_command.c */
-char	*find_path(char **env);
-int		find_command(char *command, char **env, t_f_com *parse);
+// char	*find_path(char **env);
+// int		find_command(char *command, char **env, t_f_com *parse);
 /* scr/utils.c */
 void	free_split(char **split);
+int		double_ptr_len(void **ptr);
 #endif
