@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:04 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/11 12:16:05 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/11 16:13:04 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,23 @@ void	init_struc(t_f_com *path)
 
 }
 
+char	*find_slash(char *command, t_parse	*com)
+{
+	com->join = NULL;
+	if (command[0] != '/')
+	{
+		com->join = ft_addstart_char(command, 47);
+		if (!com->join)
+		{
+			perror(E_MEMO);
+			exit (ERROR);
+		}
+		return (com->join);
+	}
+	else
+		return (command);
+}
+
 void	parse_command(char *command, char **env)
 {
 	t_parse	com;
@@ -76,10 +93,14 @@ void	parse_command(char *command, char **env)
 		free_split(com.split);
 		exit (ERROR);
 	}
+	com.command = find_slash(com.command, &com);
+	ft_printf("%s\n", com.command);
 	if (find_command(com.command, env, &path) == TRUE)
 		ft_printf("%sOK\n%s", G, E);
 	else
 		ft_printf("%sKO\n%s", R, E);
+	if (com.join != NULL)
+		free(com.join);
 	free(com.argv);
 	free_split(com.split);
 }
