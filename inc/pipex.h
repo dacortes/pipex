@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/10 09:05:09 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/11 09:56:41 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 /* Utils */
 # define D_QUOTES	34
+# define EQUAL		61
 /* Outputs */
 # define SUCCESS 0
 # define FALSE	 0
@@ -36,6 +37,7 @@
 # define E_COMN "Command not found"
 # define E_PERM "Permissions denied"
 # define E_NARC "number of invalid arguments"
+# define E_INVC "Error: invalid command or invalid command argument"
 
 // ================================= COLORS ================================= //
 
@@ -67,7 +69,7 @@ typedef struct s_parse
 	char	**split;
 	char	**argv;
 	char	*command;
-	int		qoutes;
+	char	*join;
 	int		i;
 }	t_parse;
 
@@ -78,9 +80,11 @@ typedef struct s_parse
 /* command/check_permissions.c */
 int		check_perissions(t_f_com *parse);
 /* command/find_command.c */
-// char	*find_path(char **env);
-// int		find_command(char *command, char **env, t_f_com *parse);
+char	*find_path(char **env);
+int		find_command(char *command, char **env, t_f_com *parse);
 /* scr/utils.c */
 void	free_split(char **split);
 int		double_ptr_len(void **ptr);
+int		check_quotes(char *str);
+int		check_quuotes_argv(char **agrv);
 #endif

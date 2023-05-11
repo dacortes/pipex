@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/05/05 12:04:36 by dacortes         ###   ########.fr        #
+#    Updated: 2023/05/10 09:48:36 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ FLAGS = -Wall -Wextra -Werror -g
 
 # =========================== SOURCES ======================================== #
 
-SRC = command/check_permissions.c command/find_command.c\
+SRC = command/check_permissions.c command/find_path.c\
 utils.c\
 main.c
 LIBFT = ./libft/

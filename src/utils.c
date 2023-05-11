@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:08 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/10 09:00:56 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/10 09:44:11 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,39 @@ int	double_ptr_len(void **ptr)
 	while (ptr[len])
 		len++;
 	return (len);
+}
+
+int	check_quotes(char *str)
+{
+	int	quotes;
+	int	i = 0;
+
+	quotes = FALSE;
+	while (str[i])
+	{
+		if (str[i] == D_QUOTES)
+		{
+			quotes = TRUE;
+			i++;
+			while (str[i] && str[i] != D_QUOTES )
+				i++;
+		}
+		if (!str[i])
+			return (FALSE);
+		i++;
+	}
+	return (!quotes || (quotes && (str[i - 1] == D_QUOTES)));
+}
+
+int	check_quuotes_argv(char **agrv)
+{
+	int i;
+	i = 0;
+	while (agrv[i])
+	{
+		if (!check_quotes(agrv[i]))
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
 }

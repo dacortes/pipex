@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:04 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/10 09:37:24 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/11 12:16:05 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,44 +37,26 @@
 // 	return (SUCCESS);
 // }
 
-int	check_quotes(char *str)
-{
-	int	quotes;
-	int	i = 0;
+/*com.i = 0;
+while (com.argv[com.i])
+	ft_printf("The argument is:%s%s%s\n", B, com.argv[com.i++], E);*/
 
-	quotes = FALSE;
-	while (str[i])
-	{
-		if (str[i] == D_QUOTES)
-		{
-			quotes = TRUE;
-			i++;
-			while (str[i] && str[i] != D_QUOTES )
-				i++;
-		}
-		if (!str[i])
-			return (FALSE);
-		i++;
-	}
-	return (!quotes || (quotes && (str[i - 1] == D_QUOTES)));
+void	init_struc(t_f_com *path)
+{
+	path->split = NULL;
+	path->path = NULL;
+	path->add = NULL;
+	path->join = NULL;
+	path->i = 0;
+	path->axu_i = 0;
+	path->f_ok = FALSE;
+
 }
 
-int	check_quuotes_argv(char **agrv)
-{
-	int i;
-	i = 0;
-	while (agrv[i])
-	{
-		if (!check_quotes(agrv[i]))
-			return (FALSE);
-		i++;
-	}
-	return (TRUE);
-}
-
-void	parse_command(char *command)
+void	parse_command(char *command, char **env)
 {
 	t_parse	com;
+	t_f_com path;
 
 	com.split = ft_split(command, ' ');
 	com.argv = ft_calloc(double_ptr_len((void *)com.split) + 1, sizeof(char *));
@@ -87,16 +69,22 @@ void	parse_command(char *command)
 	com.i = 0;
 	while (com.split[com.i++])
 		com.argv[com.i - 1] = com.split[com.i];
-	com.i = 0;
-	while (com.argv[com.i])
-		ft_printf("The argument is:%s%s%s\n", B, com.argv[com.i++], E);
 	if (!(check_quotes(com.command) && check_quuotes_argv(com.argv)))
+	{
+		ft_printf("%s%s%s\n", R, E_INVC, E);
+		free(com.argv);
+		free_split(com.split);
+		exit (ERROR);
+	}
+	if (find_command(com.command, env, &path) == TRUE)
+		ft_printf("%sOK\n%s", G, E);
+	else
 		ft_printf("%sKO\n%s", R, E);
 	free(com.argv);
 	free_split(com.split);
 }
 
-int	main (int ac,  char **av)
+int	main (int ac,  char **av, char **env)
 {
 	if (ac != 5)
 	{
@@ -107,6 +95,6 @@ int	main (int ac,  char **av)
 	char	*com1 = av[2];
 	// char	*com2 = av[3];
 	// char	*o_file = av[4];
-	parse_command(com1);
+	parse_command(com1, env);
 	return (SUCCESS);
 }
