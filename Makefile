@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/05/11 16:22:35 by dacortes         ###   ########.fr        #
+#    Updated: 2023/05/15 15:57:00 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,11 +16,11 @@ NAME = pipex
 CC = gcc
 RM = rm -rf
 LIBC = ar -rcs
-FLAGS = -Wall -Wextra -Werror -fsanitize=address
+FLAGS = -Wall -Wextra -Werror #-fsanitize=address
 
 # =========================== SOURCES ======================================== #
 
-SRC = command/check_permissions.c command/find_path.c\
+SRC = command/find_path.c\
 utils.c\
 main.c
 LIBFT = ./libft/

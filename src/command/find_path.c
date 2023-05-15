@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 10:59:54 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/11 12:55:14 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:45:39 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,7 @@ char	*find_path(char **env)
 		i++;
 	}
 	if (!path)
-	{
-		ft_printf("%s%s%s", R, E_PATH, E);
-		return (NULL);
-	}
+		exit(printf_error(E_PTH, -2));
 	return (path);
 }
 
@@ -40,10 +37,11 @@ void	execute_permission(t_f_com *parse)
 		free(parse->join);
 		parse->f_ok = TRUE;
 	}
-	else
+	else if (access(parse->join, X_OK) == ERROR)
 	{
-		parse->f_ok = FALSE;
 		free(parse->add);
+		parse->f_ok = FALSE;
+		exit (printf_error(E_NSF, -2));
 	}
 }
 
@@ -51,19 +49,13 @@ int	parse_path(char *command, t_f_com *parse)
 {
 	parse->split = ft_split(parse->add, ':');
 	if (!parse->split)
-	{
-		perror(E_MEMO);
-		exit (ERROR);
-	}
+		exit (printf_error(E_MEM, 1));
 	parse->i = 0;
 	while (parse->split[parse->i])
 	{
 		parse->join = ft_strjoin(parse->split[parse->i++], command);
 		if (!parse->add)
-		{
-			perror(E_MEMO);
-			exit (ERROR);
-		}
+			exit (printf_error(E_MEM, 1));
 		if (access(parse->join, F_OK) != ERROR)
 			break ;
 		free(parse->join);
@@ -83,10 +75,7 @@ int	find_command(char *command, char **env, t_f_com *parse)
 		parse->i++;
 	parse->add = ft_calloc(sizeof(char), (ft_strlen(parse->path) - parse->i) + 1);
 	if (!parse->add)
-	{
-		perror(E_MEMO);
-		exit (ERROR);
-	}
+		exit (printf_error(E_MEM, 1));
 	parse->axu_i = 0;
 	while (parse->path[parse->i++])
 		parse->add[parse->axu_i++] = parse->path[parse->i];
