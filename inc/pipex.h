@@ -6,13 +6,14 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/15 15:57:11 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/15 19:24:53 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
+# include <fcntl.h>
 # include <stdio.h>
 # include <string.h>
 # include"../libft/libft.h"
@@ -31,22 +32,17 @@
 # define ERROR 	-1
 # define E_EXIT  1
 
-/* Errors */
-# define E_MEMO "Memory allocation error"
-# define E_PATH "Path not found"
-# define E_COMN "Command not found\n"
-# define E_PERM "Permissions denied"
-# define E_NARC "number of invalid arguments"
-# define E_INVC "Error: invalid command or invalid command argument"
-
 /* Error */
-
 # define	E_ARG 1
 # define	E_MEM 2
 # define	E_PTH 3
 # define	E_NSF 4
+# define	E_OPN 5
 # define	E_PRM 126
 # define	E_CNF 127
+/* Type file */
+# define	IN	1
+# define	OUT 2
 
 // ================================= COLORS ================================= //
 
@@ -81,6 +77,16 @@ typedef struct s_parse
 	char	*join;
 	int		i;
 }	t_parse;
+/* pipex */
+typedef struct s_pipex
+{
+	char	*in_file;
+	char	*com1;
+	char	*com2;
+	char	*out_file;
+	int		fd_in;
+	int		fd_out;
+}	t_pipex;
 
 
 
@@ -89,6 +95,9 @@ typedef struct s_parse
 /* command/find_command.c */
 char	*find_path(char **env);
 int		find_command(char *command, char **env, t_f_com *parse);
+/* command/parse.c */
+char	*find_slash(char *command);
+void	parse_command(char *command, char **env);
 /* scr/utils.c */
 void	free_split(char **split);
 int		double_ptr_len(void **ptr);
