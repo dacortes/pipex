@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 17:33:30 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/15 19:28:53 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/16 12:12:12 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,29 +24,29 @@ char	*find_slash(char *command)
 		return (command);
 }
 
-void	parse_command(char *command, char **env)
+void	parse_command(char *command, char **env, t_parse *com)
 {
-	t_parse	com;
+	// t_parse	com;
 	t_f_com	path;
 
-	com.split = ft_split(command, ' ');
-	com.argv = ft_calloc(double_ptr_len((void *)com.split) + 1, sizeof(char *));
-	if (!com.argv)
+	com->split = ft_split(command, ' ');
+	com->argv = ft_calloc(double_ptr_len((void *)com->split) + 1, sizeof(char *));
+	if (!com->argv)
 		exit (printf_error(E_MEM, 1));
-	com.command = com.split[0];
-	com.i = 0;
-	while (com.split[com.i++])
-		com.argv[com.i - 1] = com.split[com.i];
-	if (!(check_quotes(com.command) && check_quotes_argv(com.argv)))
+	com->command = com->split[0];
+	com->i = 0;
+	while (com->split[com->i++])
+		com->argv[com->i - 1] = com->split[com->i];
+	if (!(check_quotes(com->command) && check_quotes_argv(com->argv)))
 	{
-		free(com.argv);
-		free_split(com.split);
+		free(com->argv);
+		free_split(com->split);
 		exit (printf_error(E_CNF, 127));
 	}
-	com.command = find_slash(com.command);
-	com.command = ft_addstart_char(com.command, '/');
-	find_command(com.command, env, &path);
-	free(com.command);
-	free(com.argv);
-	free_split(com.split);
+	com->command = find_slash(com->command);
+	com->command = ft_addstart_char(com->command, '/');
+	find_command(com->command, env, &path);
+	// free(com->command);
+	// free(com->argv);
+	// free_split(com->split);
 }

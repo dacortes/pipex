@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/15 19:24:53 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/16 12:21:42 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@
 # define	E_PTH 3
 # define	E_NSF 4
 # define	E_OPN 5
+# define	E_FRK 6
+# define	E_PIP 7
+# define	E_EXC 8
 # define	E_PRM 126
 # define	E_CNF 127
 /* Type file */
@@ -86,6 +89,9 @@ typedef struct s_pipex
 	char	*out_file;
 	int		fd_in;
 	int		fd_out;
+	int		tube[2];
+	pid_t	pid1;
+	pid_t	pid2;
 }	t_pipex;
 
 
@@ -97,7 +103,7 @@ char	*find_path(char **env);
 int		find_command(char *command, char **env, t_f_com *parse);
 /* command/parse.c */
 char	*find_slash(char *command);
-void	parse_command(char *command, char **env);
+void	parse_command(char *command, char **env, t_parse *com);
 /* scr/utils.c */
 void	free_split(char **split);
 int		double_ptr_len(void **ptr);
