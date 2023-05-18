@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 17:33:15 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/18 21:40:35 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/18 22:58:47 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,9 +153,8 @@ void get_command(t_test *pipex)
 		i++;
 	}
 	char	*command;
-	ft_printf(R"El size es :%d<----\n"E, ft_strlen(command));
 	char	*arg;
-	ft_printf(B"%d\n"E, space);
+	ft_printf(B"%d\n"E, i);
 	command = ft_calloc(j + 1, sizeof(char));
 	if (!command)
 	{
@@ -163,19 +162,25 @@ void get_command(t_test *pipex)
 		close(pipex->tube[1]);
 		exit (msg_error(E_MEM, 1));
 	}
-	i = i - j - (space > 0);
+	ft_printf(R"El size es :%d<----\n"E, ft_strlen(command));
+	if (space)
+    	i = i - j - space;
+	else
+		i = i - j;
+	ft_printf(B"%d\n"E, i);
 	j = 0;
 	while (pipex->cmmd1[i] && (pipex->cmmd1[i] != D_QUOTES
 		&& pipex->cmmd1[i] != QUOTES) && pipex->cmmd1[i] != ' ')
 		command[j++] = pipex->cmmd1[i++];
-	ft_printf("el  comand: %s<----\n", command);
+	ft_printf("el  comand:%s<----\n", command);
 	free(command);
+	i = i + (pipex->cmmd1[i + 1] == D_QUOTES || pipex->cmmd1[i + 1] == QUOTES);
 	while (pipex->cmmd1[i] && pipex->cmmd1[i] == ' ')
 		i++;
 	arg = &pipex->cmmd1[i];
-	ft_printf("los argumentos: %s<----\n", arg);
+	ft_printf("los argumentos:%s<----\n", arg);
 	char **split = ft_split(arg, D_QUOTES);
-	ft_printf(Y"%s"E, split[1]);
+	ft_printf(Y"%s-"E, split[0]);
 	free_split(split);
 	ft_printf(R"\nEl size es :%d<----\n"E, ft_strlen(command));
 }
