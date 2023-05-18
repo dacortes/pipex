@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 17:33:15 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/18 16:43:51 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/18 21:40:35 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ void get_command(t_test *pipex)
 		}
 	int i = 0;
 	int j = 0;
+	int		space = 0;
 	while (pipex->cmmd1[i] && (pipex->cmmd1[i] == D_QUOTES
 		|| pipex->cmmd1[i] == QUOTES))
 		i++;
@@ -141,7 +142,9 @@ void get_command(t_test *pipex)
 		exit (msg_error(E_CNF, 126));
 	while (pipex->cmmd1[i])
 	{
-		if (pipex->cmmd1[i] &&  pipex->cmmd1[i] != ' ' 
+		if  (pipex->cmmd1[i] == ' ')
+				space++;
+		if (pipex->cmmd1[i] &&  pipex->cmmd1[i] != ' '
 		&& (pipex->cmmd1[i] != D_QUOTES && pipex->cmmd1[i] != QUOTES))
 			j++;
 		if (pipex->cmmd1[i] && (pipex->cmmd1[i] == D_QUOTES
@@ -150,8 +153,9 @@ void get_command(t_test *pipex)
 		i++;
 	}
 	char	*command;
-	//char	*arg;
-	ft_printf(B"%d\n"E, i);
+	ft_printf(R"El size es :%d<----\n"E, ft_strlen(command));
+	char	*arg;
+	ft_printf(B"%d\n"E, space);
 	command = ft_calloc(j + 1, sizeof(char));
 	if (!command)
 	{
@@ -159,13 +163,21 @@ void get_command(t_test *pipex)
 		close(pipex->tube[1]);
 		exit (msg_error(E_MEM, 1));
 	}
-	i = i - j - 1;
+	i = i - j - (space > 0);
 	j = 0;
-	while (pipex->cmmd1[i] && pipex->cmmd1[i] && (pipex->cmmd1[i] != D_QUOTES
+	while (pipex->cmmd1[i] && (pipex->cmmd1[i] != D_QUOTES
 		&& pipex->cmmd1[i] != QUOTES) && pipex->cmmd1[i] != ' ')
 		command[j++] = pipex->cmmd1[i++];
+	ft_printf("el  comand: %s<----\n", command);
 	free(command);
-	ft_printf("%s<----\n", command);
+	while (pipex->cmmd1[i] && pipex->cmmd1[i] == ' ')
+		i++;
+	arg = &pipex->cmmd1[i];
+	ft_printf("los argumentos: %s<----\n", arg);
+	char **split = ft_split(arg, D_QUOTES);
+	ft_printf(Y"%s"E, split[1]);
+	free_split(split);
+	ft_printf(R"\nEl size es :%d<----\n"E, ft_strlen(command));
 }
 
 void	init_pipex(t_test	*pipex, int ac, char **av, char **env)
