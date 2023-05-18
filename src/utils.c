@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:08 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/16 12:22:09 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:14:12 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,6 @@ void	free_split(char **split)
 		free(split[i++]);
 	if (split)
 		free(split);
-}
-
-int	double_ptr_len(void **ptr)
-{
-	int	len;
-
-	len = 0;
-	while (ptr[len])
-		len++;
-	return (len);
 }
 
 int	check_quotes(char *str)

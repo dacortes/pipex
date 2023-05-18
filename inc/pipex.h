@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/16 12:21:42 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/17 17:59:50 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 
 /* Utils */
 # define D_QUOTES	34
-# define EQUAL		61
+# define QUOTES		39
+
 /* Outputs */
 # define SUCCESS 0
 # define FALSE	 0
@@ -94,20 +95,33 @@ typedef struct s_pipex
 	pid_t	pid2;
 }	t_pipex;
 
+/* test estruc */
+
+typedef struct s_test
+{
+	char	*path;
+	char	*infile;
+	char	*outfile;
+	char	*cmmd1;
+	char	*cmmd2;
+	int		tube[2];
+	int		infd;
+	int		outfd;
+}	t_test;
 
 
 // ================================= FUNCTIONS ============================== //
 
-/* command/find_command.c */
-char	*find_path(char **env);
-int		find_command(char *command, char **env, t_f_com *parse);
-/* command/parse.c */
-char	*find_slash(char *command);
-void	parse_command(char *command, char **env, t_parse *com);
-/* scr/utils.c */
-void	free_split(char **split);
-int		double_ptr_len(void **ptr);
-int		check_quotes(char *str);
-int		check_quotes_argv(char **agrv);
-int		printf_error(int error,  int exit_);
+// /* command/find_command.c */
+// char	*find_path(char **env);
+// int		find_command(char *command, char **env, t_f_com *parse);
+// /* command/parse.c */
+// char	*find_slash(char *command);
+// void	parse_command(char *command, char **env, t_parse *com, t_f_com *path);
+// /* scr/utils.c */
+// void	free_split(char **split);
+// int		double_ptr_len(void **ptr);
+// int		check_quotes(char *str);
+// int		check_quotes_argv(char **agrv);
+// int		printf_error(int error,  int exit_);
 #endif

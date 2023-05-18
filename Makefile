@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/05/15 17:35:34 by dacortes         ###   ########.fr        #
+#    Updated: 2023/05/16 18:06:06 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,11 +20,12 @@ FLAGS = -Wall -Wextra -Werror #-fsanitize=address
 
 # =========================== SOURCES ======================================== #
 
-SRC = command/find_path.c command/parse.c\
+SRC = main.c
+#command/find_path.c command/parse.c\
 utils.c\
 main.c
 LIBFT = ./libft/
-L_SRC = ./src
+L_SRC = ./test
 L_LIB = ./libft/libft.a
 INC			=	-I ./inc/\
 				-I ./libft/\
