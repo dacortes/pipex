@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 17:33:15 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/26 18:33:34 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/26 19:19:43 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,36 +133,6 @@ int	ignore(char *str, char a, char b, char c)
 	return (i);
 }
 
-// char	*get_command(char *command, t_pipex *pipex)
-// {
-// 	int		i;
-// 	int		len;
-// 	char	*tmp_comd;
-
-// 	len = 0;
-// 	i = ignore(command, ' ', QUOTES, D_QUOTES);
-// 	while (command[i])
-// 	{
-// 		if (command[i] && command[i] != ' ' && command[i] != QUOTES
-// 			&& command[i] != D_QUOTES)
-// 			len++;
-// 		if (command[i] && (command[i] == ' ' || command[i] == QUOTES
-// 			|| command[i] == D_QUOTES))
-// 			break ;
-// 		i++;
-// 	}
-// 	tmp_comd = ft_calloc(len +  1, (sizeof(char)));
-// 	if (!tmp_comd)
-// 		exit (close_and_exit(E_MEM, 1, pipex));
-// 	i = ignore(command, ' ', QUOTES, D_QUOTES);
-// 	len = 0;
-// 	while (command[i] && command[i] != ' ' && command[i] != QUOTES
-// 			&& command[i] != D_QUOTES)
-// 		tmp_comd[len++] = command[i++];
-// 	free(tmp_comd);
-// 	return (tmp_comd);
-// }
-
 char	*get_command(char *command, t_pipex *pipex)
 {
 	t_get	get;
@@ -190,6 +160,89 @@ char	*get_command(char *command, t_pipex *pipex)
 	free(get.cmmd);
 	return (get.cmmd);
 }
+
+void	axu_get_arg_len(int *len, char **split)
+{
+	int	i;
+	int	j;
+	int	OK_;
+
+	i = 0;
+	j = 0;
+	(*len) = 0;
+	OK_ = FALSE;
+	while (split[i])
+	{
+		j = 0;
+		OK_ = FALSE;
+		while (split[i][j])
+		{
+			if (split[i][j] != ' ')
+			{
+				OK_ = TRUE;
+				break ;
+			}
+			j++;
+		}
+		if (OK_ == TRUE)
+			(*len)++;
+		i++;
+	}
+}
+
+void	axu_get_arg(t_get *get)
+{
+	int	OK_;
+
+	get->i = 0;
+	get->len = 0;
+	OK_ = FALSE;
+	while (get->split[get->i])
+	{
+		get->j = 0;
+		OK_ = FALSE;
+		while (get->split[get->i][get->j])
+		{
+			if (get->split[get->i][get->j] != ' ')
+			{
+				OK_ = TRUE;
+				break ;
+			}
+			get->j++;
+		}
+		if (OK_ == TRUE && get->split[get->i])
+			get->arg[get->len++] = get->split[get->i];
+		get->i++;
+	}
+}
+
+// char	*get_arg(char *command, char *need, t_pipex *pipex)
+// {
+// 	t_get	get;
+
+// 	get.n_arg = ft_strnstr(command, need, ft_strlen(command));
+// 	get.n_arg = &get.n_arg[ft_strlen(need) +\
+// 		(!is_del_close(&get.n_arg[ft_strlen(need)], D_QUOTES
+// 		|| !is_del_close(&get.n_arg[ft_strlen(need)], QUOTES)))];
+// 	get.del = ' ';
+// 	if (ft_strchr(&get.n_arg[ft_strlen(need)], D_QUOTES))
+// 		get.del = D_QUOTES;
+// 	get.split = ft_split(&get.n_arg[ft_strlen(need) - 1], get.del);
+// 	if (!get.split)
+// 		exit (close_and_exit(E_MEM, 1, pipex));
+// 	axu_get_arg_len(&get.len, get.split);
+// 	get.arg = ft_calloc(get.len + 1, sizeof(char *));
+// 	if(!get.arg)
+// 		exit (close_and_exit(E_MEM, 1, pipex));
+// 	axu_get_arg(&get);
+// 	get.i = 0;
+// 	ft_printf(G"%s<-\n"E, get.split[0]);
+// 	while (get.arg[get.i])
+// 		ft_printf(G"%s\n"E, get.arg[get.i++]);
+// 	free_split(get.split);
+// 	free(get.arg);
+// 	return ("hola");
+// }
 
 char	*get_arg(char *command, char *need, t_pipex *pipex)
 {
