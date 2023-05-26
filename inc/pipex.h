@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/17 17:59:50 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/26 18:24:36 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,44 +60,8 @@
 
 /* structure find */
 
-typedef struct s_f_com
-{
-	char	**split;
-	char	*path;
-	char	*add;
-	char	*join;
-	int		i;
-	int		axu_i;
-	int		f_ok;
-}	t_f_com;
-
-/* structure parse command */
-
-typedef struct s_parse
-{
-	char	**split;
-	char	**argv;
-	char	*command;
-	char	*join;
-	int		i;
-}	t_parse;
-/* pipex */
-typedef struct s_pipex
-{
-	char	*in_file;
-	char	*com1;
-	char	*com2;
-	char	*out_file;
-	int		fd_in;
-	int		fd_out;
-	int		tube[2];
-	pid_t	pid1;
-	pid_t	pid2;
-}	t_pipex;
-
 /* test estruc */
-
-typedef struct s_test
+typedef struct s_pipex
 {
 	char	*path;
 	char	*infile;
@@ -107,8 +71,18 @@ typedef struct s_test
 	int		tube[2];
 	int		infd;
 	int		outfd;
-}	t_test;
-
+}	t_pipex;
+/* get_arg */
+typedef struct s_get
+{
+	char	**split;
+	char	**arg;
+	char	*cmmd;
+	char	del;
+	int		len;
+	int		i;
+	int		j;
+}	t_get;
 
 // ================================= FUNCTIONS ============================== //
 

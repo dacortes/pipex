@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 17:33:15 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/26 15:52:06 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/26 18:33:34 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	msg_error(int error, int exit_)
 	return (exit_);
 }
 
-int	close_and_exit(int error, int exit_, t_test *pipex)
+int	close_and_exit(int error, int exit_, t_pipex *pipex)
 {
 	close(pipex->tube[0]);
 	close(pipex->tube[1]);
@@ -62,7 +62,7 @@ char	*find_path(char **env)
 	return (path);
 }
 
-void	parse_file(t_test *pipex, int type)
+void	parse_file(t_pipex *pipex, int type)
 {
 	if (type == IN)
 	{
@@ -123,81 +123,6 @@ void	free_split(char **split)
 		free(split);
 }
 
-// void get_command(t_test *pipex)
-// {
-// 	if  (!is_del_close(pipex->cmmd1, D_QUOTES)
-// 		|| !is_del_close(pipex->cmmd1, QUOTES))
-// 		{
-// 			close(pipex->tube[0]);
-// 			close(pipex->tube[1]);
-// 			exit (msg_error(E_CNF, 126));
-// 		}
-// 	int i = 0;
-// 	int j = 0;
-// 	int		space = 0;
-// 	while (pipex->cmmd1[i] && (pipex->cmmd1[i] == D_QUOTES
-// 		|| pipex->cmmd1[i] == QUOTES))
-// 		i++;
-// 	if (pipex->cmmd1[i] == ' ')
-// 		exit (msg_error(E_CNF, 126));
-// 	while (pipex->cmmd1[i])
-// 	{
-// 		if  (pipex->cmmd1[i] == ' ')
-// 				space++;
-// 		if (pipex->cmmd1[i] &&  pipex->cmmd1[i] != ' '
-// 		&& (pipex->cmmd1[i] != D_QUOTES && pipex->cmmd1[i] != QUOTES))
-// 			j++;
-// 		if (pipex->cmmd1[i] && (pipex->cmmd1[i] == D_QUOTES
-// 		|| pipex->cmmd1[i] == QUOTES))
-// 			break ;
-// 		i++;
-// 	}
-// 	char	*command;
-// 	char	*arg;
-
-// 	command = ft_calloc(j + 1, sizeof(char));
-// 	if (!command)
-// 	{
-// 		close(pipex->tube[0]);
-// 		close(pipex->tube[1]);
-// 		exit (msg_error(E_MEM, 1));
-// 	}
-// 	if (space)
-//     	i = i - j - space;
-// 	else
-// 		i = i - j;
-// 	j = 0;
-// 	while (pipex->cmmd1[i] && (pipex->cmmd1[i] != D_QUOTES
-// 		&& pipex->cmmd1[i] != QUOTES) && pipex->cmmd1[i] != ' ')
-// 		command[j++] = pipex->cmmd1[i++];
-// 	ft_printf("el  comand:%s<----\n", command);
-// 	free(command);
-// 	i = i + (pipex->cmmd1[i + 1] == D_QUOTES || pipex->cmmd1[i + 1] == QUOTES);
-// 	while (pipex->cmmd1[i] && pipex->cmmd1[i] == ' ')
-// 		i++;
-// 	arg = &pipex->cmmd1[i];
-// 	ft_printf("los argumentos:%s<----\n", arg);
-// 	i = 0;
-// 	int comas = 0;
-// 	int espacios = 0;
-// 	int comas_s = 0;
-// 	while (arg[i])
-// 	{
-// 		if (arg[i] == D_QUOTES)
-// 			comas++;
-// 		if (arg[i] == QUOTES)
-// 			comas_s++;
-// 		if (arg[i] == ' ')
-// 			espacios++;
-// 		i++;
-// 	}
-// 	ft_printf("doble comas:%d espacioes%d comas simples%d\n", comas, espacios, comas_s);
-// 	char **split = ft_split(arg, D_QUOTES);
-// 	ft_printf(Y"%s-"E, split[1]);
-// 	free_split(split);
-// 	ft_printf(R"\nEl size es :%d<----\n"E, ft_strlen(command));
-// }
-
 int	ignore(char *str, char a, char b, char c)
 {
 	int	i;
@@ -207,43 +132,72 @@ int	ignore(char *str, char a, char b, char c)
 		i++;
 	return (i);
 }
-char	*get_command(char *command, t_test *pipex)
-{
-	int		i;
-	int		len;
-	char	*tmp_comd;
 
-	len = 0;
-	i = ignore(command, ' ', QUOTES, D_QUOTES);
-	while (command[i])
+// char	*get_command(char *command, t_pipex *pipex)
+// {
+// 	int		i;
+// 	int		len;
+// 	char	*tmp_comd;
+
+// 	len = 0;
+// 	i = ignore(command, ' ', QUOTES, D_QUOTES);
+// 	while (command[i])
+// 	{
+// 		if (command[i] && command[i] != ' ' && command[i] != QUOTES
+// 			&& command[i] != D_QUOTES)
+// 			len++;
+// 		if (command[i] && (command[i] == ' ' || command[i] == QUOTES
+// 			|| command[i] == D_QUOTES))
+// 			break ;
+// 		i++;
+// 	}
+// 	tmp_comd = ft_calloc(len +  1, (sizeof(char)));
+// 	if (!tmp_comd)
+// 		exit (close_and_exit(E_MEM, 1, pipex));
+// 	i = ignore(command, ' ', QUOTES, D_QUOTES);
+// 	len = 0;
+// 	while (command[i] && command[i] != ' ' && command[i] != QUOTES
+// 			&& command[i] != D_QUOTES)
+// 		tmp_comd[len++] = command[i++];
+// 	free(tmp_comd);
+// 	return (tmp_comd);
+// }
+
+char	*get_command(char *command, t_pipex *pipex)
+{
+	t_get	get;
+
+	get.len = 0;
+	get.i = ignore(command, ' ', D_QUOTES, QUOTES);
+	while (command[get.i])
 	{
-		if (command[i] && command[i] != ' ' && command[i] != QUOTES
-			&& command[i] != D_QUOTES)
-			len++;
-		if (command[i] && (command[i] == ' ' || command[i] == QUOTES
-			|| command[i] == D_QUOTES))
+		if (command[get.i] && command[get.i] != ' ' && command[get.i] != QUOTES
+			&& command[get.i] != D_QUOTES)
+			get.len++;
+		if (command[get.i] && (command[get.i] == ' ' || command[get.i] == QUOTES
+			|| command[get.i] == D_QUOTES))
 			break ;
-		i++;
+		get.i++;
 	}
-	tmp_comd = ft_calloc(len +  1, (sizeof(char)));
-	if (!tmp_comd)
+	get.cmmd = ft_calloc(get.len + 1, (sizeof(char)));
+	if (!get.cmmd)
 		exit (close_and_exit(E_MEM, 1, pipex));
-	i = ignore(command, ' ', QUOTES, D_QUOTES);
-	len = 0;
-	while (command[i] && command[i] != ' ' && command[i] != QUOTES
-			&& command[i] != D_QUOTES)
-		tmp_comd[len++] = command[i++];
-	free(tmp_comd);
-	return (tmp_comd);
+	get.i = ignore(command, ' ', D_QUOTES, QUOTES);
+	get.len = 0;
+	while (command[get.i] && command[get.i] != ' ' && command[get.i] != QUOTES
+		&& command[get.i] != D_QUOTES)
+		get.cmmd[get.len++] = command[get.i++];
+	free(get.cmmd);
+	return (get.cmmd);
 }
 
-char	*get_arg(char *command, char *need, t_test *pipex)
+char	*get_arg(char *command, char *need, t_pipex *pipex)
 {
 	char	*arg;
 	char	**split;
 	char	**get;
 	char	del;
-	(void)pipex;
+
 	arg = ft_strnstr(command, need, ft_strlen(command));
 	arg = &arg[ft_strlen(need) + (!is_del_close(&arg[ft_strlen(need)], D_QUOTES
 		|| !is_del_close(&arg[ft_strlen(need)], QUOTES)))];
@@ -299,14 +253,12 @@ char	*get_arg(char *command, char *need, t_test *pipex)
 		i++;
 	}
 	len = 0;
-	while (get[len])
-		ft_printf(G"Se paso el  str %s<-\n"E, get[len++]);
 	free_split(split);
 	free(get);
 	return (&arg[ft_strlen(need)]);
 }
 
-void	parse_command(char *command, t_test *pipex)
+void	parse_command(char *command, t_pipex *pipex)
 {
 	if  (!is_del_close(command, D_QUOTES)
 		|| !is_del_close(command, QUOTES))
@@ -316,7 +268,8 @@ void	parse_command(char *command, t_test *pipex)
 	ft_printf("%s\n", get_command(command, pipex));
 	ft_printf(B"%s\n"E, get_arg(command, get_command(command, pipex), pipex));
 }
-void	init_pipex(t_test	*pipex, int ac, char **av, char **env)
+
+void	init_pipex(t_pipex	*pipex, int ac, char **av, char **env)
 {
 	pipex->infile = av[1];
 	parse_file(pipex, IN);
@@ -333,7 +286,7 @@ void	init_pipex(t_test	*pipex, int ac, char **av, char **env)
 
 int main(int ac, char **av, char **env)
 {
-	t_test	pipex;
+	t_pipex	pipex;
 	if (ac != 5)
 		exit(msg_error(E_ARG, 1));
 	init_pipex(&pipex, ac, av, env);
