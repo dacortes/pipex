@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 17:33:15 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/26 19:19:43 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/31 17:58:56 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	msg_error(int error, int exit_)
 		ft_putstr_fd(R"Error:"E" In funtion fork\n", 2);
 	if (error == E_PIP)
 		ft_putstr_fd(R"Error:"E" In funtion pipe\n", 2);
+	if (error == E_DUP)
+		ft_putstr_fd(R"Error:"E" In funtion dup2\n", 2);
 	if (error == E_EXC)
 		ft_putstr_fd(R"Error:"E" In funtion execve\n", 2);
 	if (error == E_PRM)
@@ -35,6 +37,29 @@ int	msg_error(int error, int exit_)
 	if (error == E_CNF)
 		ft_putstr_fd(R"Error:"E" Command not found\n", 2);
 	return (exit_);
+}
+
+void	free_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i])
+		free(split[i++]);
+	if (split)
+		free(split);
+}
+
+void	free_get(t_get *get)
+{
+	if (get->paht)
+		free_split(get->paht);
+	if (get->split)
+		free_split(get->split);
+	if (get->arg)
+		free(get->arg);
+	if (get->cmmd)
+		free(get->cmmd);
 }
 
 int	close_and_exit(int error, int exit_, t_pipex *pipex)
@@ -112,17 +137,6 @@ int	is_del_close(char *str, char delimiter)
 	return (del % 2 == 0);
 }
 
-void	free_split(char **split)
-{
-	int	i;
-
-	i = 0;
-	while (split[i])
-		free(split[i++]);
-	if (split)
-		free(split);
-}
-
 int	ignore(char *str, char a, char b, char c)
 {
 	int	i;
@@ -133,32 +147,28 @@ int	ignore(char *str, char a, char b, char c)
 	return (i);
 }
 
-char	*get_command(char *command, t_pipex *pipex)
+void	get_command(char *command, t_pipex *pipex, t_get *get)
 {
-	t_get	get;
-
-	get.len = 0;
-	get.i = ignore(command, ' ', D_QUOTES, QUOTES);
-	while (command[get.i])
+	get->len = 0;
+	get->i = ignore(command, ' ', D_QUOTES, QUOTES);
+	while (command[get->i])
 	{
-		if (command[get.i] && command[get.i] != ' ' && command[get.i] != QUOTES
-			&& command[get.i] != D_QUOTES)
-			get.len++;
-		if (command[get.i] && (command[get.i] == ' ' || command[get.i] == QUOTES
-			|| command[get.i] == D_QUOTES))
+		if (command[get->i] && command[get->i] != ' ' && command[get->i] != QUOTES
+			&& command[get->i] != D_QUOTES)
+			get->len++;
+		if (command[get->i] && (command[get->i] == ' ' || command[get->i] == QUOTES
+			|| command[get->i] == D_QUOTES))
 			break ;
-		get.i++;
+		get->i++;
 	}
-	get.cmmd = ft_calloc(get.len + 1, (sizeof(char)));
-	if (!get.cmmd)
+	get->cmmd = ft_calloc(get->len + 1, (sizeof(char)));
+	if (!get->cmmd)
 		exit (close_and_exit(E_MEM, 1, pipex));
-	get.i = ignore(command, ' ', D_QUOTES, QUOTES);
-	get.len = 0;
-	while (command[get.i] && command[get.i] != ' ' && command[get.i] != QUOTES
-		&& command[get.i] != D_QUOTES)
-		get.cmmd[get.len++] = command[get.i++];
-	free(get.cmmd);
-	return (get.cmmd);
+	get->i = ignore(command, ' ', D_QUOTES, QUOTES);
+	get->len = 0;
+	while (command[get->i] && command[get->i] != ' ' && command[get->i] != QUOTES
+		&& command[get->i] != D_QUOTES)
+		get->cmmd[get->len++] = command[get->i++];
 }
 
 void	axu_get_arg_len(int *len, char **split)
@@ -216,110 +226,92 @@ void	axu_get_arg(t_get *get)
 	}
 }
 
-// char	*get_arg(char *command, char *need, t_pipex *pipex)
-// {
-// 	t_get	get;
-
-// 	get.n_arg = ft_strnstr(command, need, ft_strlen(command));
-// 	get.n_arg = &get.n_arg[ft_strlen(need) +\
-// 		(!is_del_close(&get.n_arg[ft_strlen(need)], D_QUOTES
-// 		|| !is_del_close(&get.n_arg[ft_strlen(need)], QUOTES)))];
-// 	get.del = ' ';
-// 	if (ft_strchr(&get.n_arg[ft_strlen(need)], D_QUOTES))
-// 		get.del = D_QUOTES;
-// 	get.split = ft_split(&get.n_arg[ft_strlen(need) - 1], get.del);
-// 	if (!get.split)
-// 		exit (close_and_exit(E_MEM, 1, pipex));
-// 	axu_get_arg_len(&get.len, get.split);
-// 	get.arg = ft_calloc(get.len + 1, sizeof(char *));
-// 	if(!get.arg)
-// 		exit (close_and_exit(E_MEM, 1, pipex));
-// 	axu_get_arg(&get);
-// 	get.i = 0;
-// 	ft_printf(G"%s<-\n"E, get.split[0]);
-// 	while (get.arg[get.i])
-// 		ft_printf(G"%s\n"E, get.arg[get.i++]);
-// 	free_split(get.split);
-// 	free(get.arg);
-// 	return ("hola");
-// }
-
-char	*get_arg(char *command, char *need, t_pipex *pipex)
+void	get_arg(char *command, char *need, t_pipex *pipex, t_get *get)
 {
-	char	*arg;
-	char	**split;
-	char	**get;
-	char	del;
-
-	arg = ft_strnstr(command, need, ft_strlen(command));
-	arg = &arg[ft_strlen(need) + (!is_del_close(&arg[ft_strlen(need)], D_QUOTES
-		|| !is_del_close(&arg[ft_strlen(need)], QUOTES)))];
-	del = ' ';
-	if (ft_strchr(&arg[ft_strlen(need)], D_QUOTES))
-		del = D_QUOTES;
-	split = ft_split(&arg[ft_strlen(need) - 1], del);
-	if (!split)
+	get->n_arg = ft_strnstr(command, need, ft_strlen(command));
+	get->n_arg = &get->n_arg[ft_strlen(need) +\
+		(!is_del_close(&get->n_arg[ft_strlen(need)], D_QUOTES
+		|| !is_del_close(&get->n_arg[ft_strlen(need)], QUOTES)))];
+	get->del = ' ';
+	if (ft_strchr(&get->n_arg[ft_strlen(need)], D_QUOTES))
+		get->del = D_QUOTES;
+	get->split = ft_split(&get->n_arg[ft_strlen(need) - 1], get->del);
+	if (!get->split)
 		exit (close_and_exit(E_MEM, 1, pipex));
-	int i =  0;
-	int j = 0;
-	int len = 0;
-	int	OK_ = FALSE;
-	while (split[i])
+	axu_get_arg_len(&get->len, get->split);
+	get->arg = ft_calloc(get->len + 1, sizeof(char *));
+	if(!get->arg)
 	{
-		j = 0;
-		OK_ = FALSE;
-		while (split[i][j])
-		{
-			if (split[i][j] != ' ')
-			{
-				OK_ = TRUE;
-				break ;
-			}
-			j++;
-		}
-		if (OK_ == TRUE)
-			len++;
-		ft_printf(Y"Se puede pasar?= %d el len es->%d esto: %s<-\n"E, OK_, len, split[i++]);
-	}
-	get = ft_calloc(len + 1, sizeof(char*));
-	if (!get)
+		free_split(get->split);
 		exit (close_and_exit(E_MEM, 1, pipex));
-	i =  0;
-	j = 0;
-	len = 0;
-	OK_ = FALSE;
-	while (split[i])
-	{
-		j = 0;
-		OK_ = FALSE;
-		while (split[i][j])
-		{
-			if (split[i][j] != ' ')
-			{
-				OK_ = TRUE;
-				break ;
-			}
-			j++;
-		}
-		if (OK_ == TRUE && split[i])
-			get[len++] = split[i];
-		i++;
 	}
-	len = 0;
-	free_split(split);
-	free(get);
-	return (&arg[ft_strlen(need)]);
+	axu_get_arg(get);
+	get->i = 0;
 }
 
-void	parse_command(char *command, t_pipex *pipex)
+void	get_path(t_pipex *pipex, t_get *get)
+{
+	char	*tmp;
+	char	*cmmd;
+
+	get->paht = ft_split(pipex->path, ':');
+	if (!get->paht)
+	{
+		free_split(get->split);
+		exit (close_and_exit(E_MEM, 1, pipex));
+	}
+	while (get->paht[get->i])
+	{
+		tmp = ft_addend_char(get->paht[get->i], '/');
+		if (!tmp)
+			exit (close_and_exit(E_MEM, 1, pipex));
+		cmmd = ft_strjoin(tmp, get->cmmd);
+		if (!cmmd)
+		{
+			free(tmp);
+			exit (close_and_exit(E_MEM, 1, pipex));
+		}
+		if (access(cmmd, 0) == SUCCESS)
+		{
+			get->cmmd = cmmd;
+			break ;
+		}
+		free(cmmd);
+		free(tmp);
+		get->i++;
+	}
+}
+
+void	parse_command(char *command, t_pipex *pipex, t_get *get)
 {
 	if  (!is_del_close(command, D_QUOTES)
 		|| !is_del_close(command, QUOTES))
 			exit (close_and_exit(E_CNF, 126, pipex));
-	get_command(command, pipex);
-	get_arg(command, get_command(command, pipex), pipex);
-	ft_printf("%s\n", get_command(command, pipex));
-	ft_printf(B"%s\n"E, get_arg(command, get_command(command, pipex), pipex));
+	get_command(command, pipex, get);
+	if (ft_strchr(get->cmmd, '/') && access(get->cmmd, F_OK) == ERROR
+		&& access(get->cmmd, X_OK))
+		exit (close_and_exit(E_CNF, 126, pipex));
+	if (ft_strchr(get->cmmd, '/') && access(get->cmmd, F_OK) == ERROR
+		&& access(get->cmmd, X_OK) == ERROR)
+		exit (close_and_exit(E_CNF, 127, pipex));
+	get_arg(command, get->cmmd, pipex, get);
+	get_path(pipex, get);
+}
+
+void	first_child(t_pipex *pipex, t_get *get, char **env)
+{
+	char *command;
+
+	command = ft_addstart_char(get->cmmd, '/');
+	if (!command)
+		exit (close_and_exit(E_MEM, 1, pipex));
+	if (dup2(pipex->tube[1], 1) == ERROR)
+		exit (close_and_exit(E_DUP, ERROR, pipex));
+	close(pipex->tube[0]);
+	if (dup2(pipex->infd, 0) == ERROR)
+		exit (close_and_exit(E_DUP, ERROR, pipex));
+	execve(command, get->arg, env);
+	free(command);
 }
 
 void	init_pipex(t_pipex	*pipex, int ac, char **av, char **env)
@@ -340,9 +332,25 @@ void	init_pipex(t_pipex	*pipex, int ac, char **av, char **env)
 int main(int ac, char **av, char **env)
 {
 	t_pipex	pipex;
+	t_get	get_f;
+	t_get	get_s;
+
 	if (ac != 5)
 		exit(msg_error(E_ARG, 1));
 	init_pipex(&pipex, ac, av, env);
-	parse_command(pipex.cmmd1, &pipex);
+	parse_command(pipex.cmmd1, &pipex, &get_f);
+	parse_command(pipex.cmmd2, &pipex, &get_s);
+	ft_printf(R"%s\n"E, get_f.cmmd);
+	ft_printf(R"%s\n"E, get_s.cmmd);
+	pipex.pid1 = fork();
+	if (pipex.pid1 == ERROR)
+	{
+		free_split(get_f.paht);
+		free_split(get_s.paht);
+		exit (close_and_exit(E_FRK, 1, &pipex));
+	}
+	first_child(&pipex, &get_f, env);
+	free_get(&get_f);
+	free_get(&get_s);
 	return (SUCCESS);
 }

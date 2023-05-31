@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/26 18:38:14 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/31 17:03:35 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@
 # define	E_FRK 6
 # define	E_PIP 7
 # define	E_EXC 8
+# define	E_DUP 9
 # define	E_PRM 126
 # define	E_CNF 127
 /* Type file */
@@ -63,6 +64,8 @@
 /* test estruc */
 typedef struct s_pipex
 {
+	pid_t	pid1;
+	pid_t	pid2;
 	char	*path;
 	char	*infile;
 	char	*outfile;
@@ -76,6 +79,7 @@ typedef struct s_pipex
 typedef struct s_get
 {
 	char	**split;
+	char	**paht;
 	char	**arg;
 	char	*cmmd;
 	char	*n_arg;
