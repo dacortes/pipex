@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 17:33:15 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/31 19:44:08 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/05/31 19:50:10 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,17 +249,8 @@ void	get_arg(char *command, char *need, t_pipex *pipex, t_get *get)
 	get->i = 0;
 }
 
-void	get_path(t_pipex *pipex, t_get *get)
+void	axu_get_path(char *tmp, char *cmmd, t_pipex *pipex, t_get *get)
 {
-	char	*tmp;
-	char	*cmmd;
-
-	get->paht = ft_split(pipex->path, ':');
-	if (!get->paht)
-	{
-		free_split(get->split);
-		exit (close_and_exit(E_MEM, 1, pipex));
-	}
 	while (get->paht[get->i])
 	{
 		tmp = ft_addend_char(get->paht[get->i], '/');
@@ -276,12 +267,30 @@ void	get_path(t_pipex *pipex, t_get *get)
 			free(tmp);
 			free(get->cmmd);
 			get->cmmd = cmmd;
+			get->i = 0;
 			break ;
 		}
 		free(cmmd);
 		free(tmp);
 		get->i++;
 	}
+	get->i = 0;
+}
+
+void	get_path(t_pipex *pipex, t_get *get)
+{
+	char	*tmp;
+	char	*cmmd;
+
+	tmp = NULL;
+	cmmd = NULL;
+	get->paht = ft_split(pipex->path, ':');
+	if (!get->paht)
+	{
+		free_split(get->split);
+		exit (close_and_exit(E_MEM, 1, pipex));
+	}
+	axu_get_path(tmp, cmmd, pipex, get);
 }
 
 void	parse_command(char *command, t_pipex *pipex, t_get *get)
@@ -304,7 +313,6 @@ void	first_child(t_pipex *pipex, t_get *get, char **env)
 {
 	char *command;
 
-	(void)env;
 	command = ft_addstart_char(get->cmmd, '/');
 	if (!command)
 		exit (close_and_exit(E_MEM, 1, pipex));
@@ -313,7 +321,6 @@ void	first_child(t_pipex *pipex, t_get *get, char **env)
 	close(pipex->tube[0]);
 	if (dup2(pipex->infd, 0) == ERROR)
 		exit (close_and_exit(E_DUP, ERROR, pipex));
-	// execve(command, get->arg, env);
 	free(command);
 }
 
