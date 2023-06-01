@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 17:33:15 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/31 19:50:10 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/01 11:08:27 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,6 +321,23 @@ void	first_child(t_pipex *pipex, t_get *get, char **env)
 	close(pipex->tube[0]);
 	if (dup2(pipex->infd, 0) == ERROR)
 		exit (close_and_exit(E_DUP, ERROR, pipex));
+	execve(command, get->arg, env);
+	free(command);
+}
+
+void	second_child(t_pipex *pipex, t_get *get, char **env)
+{
+	char	*command;
+
+	command = ft_addend_char(get->cmmd, '/');
+	if (!command)
+		exit (close_and_exit(E_MEM, 1, pipex));
+	if (dup2(pipex->tube[0], 0) == ERROR)
+		exit (close_and_exit(E_DUP, ERROR, pipex));
+	close(pipex->tube[1]);
+	if (dup2(pipex->outfd, 1) == ERROR)
+		exit (close_and_exit(E_DUP, ERROR, pipex));
+	execve(command, get->arg, env);
 	free(command);
 }
 
@@ -350,18 +367,24 @@ int main(int ac, char **av, char **env)
 	init_pipex(&pipex, ac, av, env);
 	parse_command(pipex.cmmd1, &pipex, &get_f);
 	parse_command(pipex.cmmd2, &pipex, &get_s);
-	ft_printf(R"%s\n"E, get_f.cmmd);
-	ft_printf(R"%s\n"E, get_s.cmmd);
 	pipex.pid1 = fork();
 	if (pipex.pid1 == ERROR)
-	{
-		
+	{	
 		free_split(get_f.paht);
 		exit (close_and_exit(E_FRK, 1, &pipex));
 	}
 	first_child(&pipex, &get_f, env);
+	pipex.pid2 = fork();
+	if (pipex.pid1 == ERROR)
+	{	
+		free_split(get_s.paht);
+		exit (close_and_exit(E_FRK, 1, &pipex));
+	}
+	close(pipex.tube[0]);
+	close(pipex.tube[1]);
+	waitpid(pipex.pid1, NULL, 0);
+	waitpid(pipex.pid2, NULL, 0);
 	free_get(&get_f);
 	free_get(&get_s);
-	ft_printf(R"%p\n"E, get_s.cmmd);
 	return (SUCCESS);
 }

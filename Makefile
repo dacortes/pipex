@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/05/16 18:06:06 by dacortes         ###   ########.fr        #
+#    Updated: 2023/06/01 19:39:54 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,15 +17,14 @@ CC = gcc
 RM = rm -rf
 LIBC = ar -rcs
 FLAGS = -Wall -Wextra -Werror #-fsanitize=address
+CURRENT_FILE = 0
+PROGRESS_BAR :=
 
 # =========================== SOURCES ======================================== #
 
 SRC = main.c
-#command/find_path.c command/parse.c\
-utils.c\
-main.c
 LIBFT = ./libft/
-L_SRC = ./test
+L_SRC = ./scr
 L_LIB = ./libft/libft.a
 INC			=	-I ./inc/\
 				-I ./libft/\
@@ -54,25 +53,29 @@ italic = \033[3m
 all: dir $(NAME)
 -include $(DEP)
 dir:
-	@make bonus -C $(LIBFT)
-	@mkdir -p $(D_OBJ)
-	@mkdir -p $(D_OBJ)/command
+	make bonus -C $(LIBFT)
+	-mkdir  $(D_OBJ)
+	-mkdir  $(D_OBJ)/command
 $(D_OBJ)/%.o:$(L_SRC)/%.c
-	@printf "$(ligth)$(Y)$@...                                         \r$(E)"
-	@$(CC) -MMD $(FLAGS) -c $< -o $@ $(INC)
+	$(CC) -MMD $(FLAGS) -c $< -o $@ $(INC)
+	$(eval CURRENT_FILE := $(shell echo $$(($(CURRENT_FILE) + 1)))) \
+	$(eval PROGRESS_BAR := $(shell awk "BEGIN { printf \"%.0f\", $(CURRENT_FILE)*100/$(TOTAL_FILES) }")) \
+	printf "$B$(ligth)⏳Compiling pipex:$E $(ligth)%-30s [%-50s] %d%%\r" "$<..." "$(shell printf '=%.0s' {1..$(shell echo "$(PROGRESS_BAR)/2" | bc)})" $(PROGRESS_BAR)
 $(NAME): $(OBJ)
-	@$(CC) $(FLAGS) $(OBJ) $(L_LIB) -o $(NAME) $(INC)
-	@echo  "\n$(B)$(ligth)-->$(G) ==== Project pipex compiled! ==== ✅$(E)"
+	$(CC) $(FLAGS) $(OBJ) $(L_LIB) -o $(NAME) $(INC)
+	echo "\n\n✅ ==== $(B)$(ligth)Project pipex compiled!$(E) ==== ✅"
 
 # ========================== CLEAN   ===================================== #
 
-.PHONY: clean fclean re
+.PHONY: all clean fclean re
 fclean: clean
-	@$(RM) $(NAME)
-	@make fclean -C $(LIBFT)
-	@echo "$(B)$(ligth)-->$(E)$(ligth) ==== fractol object files cleaned! ==== ✅$(E)"
+	$(RM) $(NAME)
+	make fclean -C $(LIBFT)
+	echo "✅ ==== $(P)$(ligth)pipex object files cleaned!$(E) ==== ✅"
 clean:
-	@$(RM) $(D_OBJ)
-	@make clean -C $(LIBFT)
-	@echo "$(B)$(ligth)-->$(E)$(ligth) ==== fractol executable files and name cleaned! ==== ✅$(E)"
+	$(RM) $(D_OBJ)
+	make clean -C $(LIBFT)
+	echo "✅ ==== $(P)$(ligth)pipex executable files and name cleaned!$(E) ==== ✅\n"
 re: fclean all
+TOTAL_FILES := $(words $(SRC))
+.SILENT:
