@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/05/31 17:03:35 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/06 11:39:06 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,9 @@
 /* Error */
 # define	E_ARG 1
 # define	E_MEM 2
-# define	E_PTH 3
-# define	E_NSF 4
-# define	E_OPN 5
-# define	E_FRK 6
-# define	E_PIP 7
-# define	E_EXC 8
-# define	E_DUP 9
+# define	E_NSF 3
+# define	E_PRR 4
+# define	E_PNF 5
 # define	E_PRM 126
 # define	E_CNF 127
 /* Type file */

@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/06/01 19:39:54 by dacortes         ###   ########.fr        #
+#    Updated: 2023/06/03 09:45:20 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ PROGRESS_BAR :=
 
 # =========================== SOURCES ======================================== #
 
-SRC = main.c
+SRC = test.c
 LIBFT = ./libft/
 L_SRC = ./scr
 L_LIB = ./libft/libft.a
@@ -43,6 +43,8 @@ R = \033[31m
 G = \033[32m
 Y = \033[33m
 B = \033[34m
+P = \033[35m
+C = \033[36m
 #Font
 ligth = \033[1m
 dark = \033[2m

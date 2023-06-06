@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 17:33:15 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/01 11:08:27 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/03 08:54:56 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,34 +311,39 @@ void	parse_command(char *command, t_pipex *pipex, t_get *get)
 
 void	first_child(t_pipex *pipex, t_get *get, char **env)
 {
-	char *command;
+	// char *command;
 
-	command = ft_addstart_char(get->cmmd, '/');
-	if (!command)
-		exit (close_and_exit(E_MEM, 1, pipex));
+	// command = ft_addstart_char(get->cmmd, '/');
+	// if (!command)
+	// 	exit (close_and_exit(E_MEM, 1, pipex));
+	ft_printf(R"command: %s\n"E, get->cmmd);
+	ft_printf(R"command: %s\n"E, get->arg[0]);
 	if (dup2(pipex->tube[1], 1) == ERROR)
 		exit (close_and_exit(E_DUP, ERROR, pipex));
 	close(pipex->tube[0]);
 	if (dup2(pipex->infd, 0) == ERROR)
 		exit (close_and_exit(E_DUP, ERROR, pipex));
-	execve(command, get->arg, env);
-	free(command);
+	execve(get->cmmd, get->arg, env);
+	ft_printf(Y"command: %s\n"E, get->cmmd);
+	//free(command);
 }
 
 void	second_child(t_pipex *pipex, t_get *get, char **env)
 {
-	char	*command;
-
-	command = ft_addend_char(get->cmmd, '/');
-	if (!command)
-		exit (close_and_exit(E_MEM, 1, pipex));
+	// char	*command;
+	// command = ft_addend_char(get->cmmd, '/');
+	// if (!command)
+	// 	exit (close_and_exit(E_MEM, 1, pipex));
+	//ft_printf(R"command: %s\n"E, get->cmmd);
+	ft_printf(R"command: %s\n"E, get->cmmd);
+	ft_printf(R"command: %s\n"E, get->arg[0]);
 	if (dup2(pipex->tube[0], 0) == ERROR)
 		exit (close_and_exit(E_DUP, ERROR, pipex));
 	close(pipex->tube[1]);
 	if (dup2(pipex->outfd, 1) == ERROR)
 		exit (close_and_exit(E_DUP, ERROR, pipex));
-	execve(command, get->arg, env);
-	free(command);
+	execve(get->cmmd, get->arg, env);
+	// free(command);
 }
 
 void	init_pipex(t_pipex	*pipex, int ac, char **av, char **env)
