@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 08:55:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/07 12:06:59 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/07 14:24:52 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ void	parse_file(t_pipex *pipex, int type)
 
 int 	close_exit(int error, int exit_, char *cmd, t_pipex *pipex)
 {
-	close(pipex->tube[0]) && close(pipex->tube[1]);
+	close(pipex->tube[0]);
+	close(pipex->tube[1]);
 	return (msg_error(error, exit_, cmd));
 }
 
@@ -300,6 +301,40 @@ void	parse_cmmd(char *cmd, t_pipex *pipex, t_get *get)
 	get_path(pipex, get);
 }
 
+void	first_child(t_pipex *pipex, t_get *g, char **env)
+{
+	if (pipex->pid1 == ERROR)
+		exit (close_exit(E_PRR, 1, NULL, pipex));
+	else if (pipex->pid1 == SUCCESS)
+	{
+		if (dup2(pipex->tube[1], 1) == ERROR)
+			exit (close_exit(E_PRR, 1, NULL, pipex));
+		close(pipex->tube[0]);
+		close(pipex->tube[1]);
+		if (dup2(pipex->infd, 0) == ERROR)
+			exit (close_exit(E_PRR, 1, NULL, pipex));
+		execve(g->cmmd, g->arg, env);
+		exit (msg_error(E_PRR, 1, NULL));
+	}
+}
+
+void	second_child(t_pipex *pipex, t_get *g, char **env)
+{
+	if (pipex->pid2 == ERROR)
+		exit (close_exit(E_PRR, 1, NULL, pipex));
+	else if (pipex->pid2 == SUCCESS)
+	{
+		if (dup2(pipex->tube[0], 0) == ERROR)
+			exit (close_exit(E_PRR, 1, NULL, pipex));
+		close(pipex->tube[0]);
+		close(pipex->tube[1]);
+		if (dup2(pipex->outfd, 1) == ERROR)
+			exit (close_exit(E_PRR, 1, NULL, pipex));
+		execve(g->cmmd, g->arg, env);
+		exit (msg_error(E_PRR, 1, NULL));
+	}
+}
+
 int		main(int ac, char **av, char **env)
 {
 	t_pipex	pipex;
@@ -312,25 +347,9 @@ int		main(int ac, char **av, char **env)
 	parse_cmmd(pipex.cmmd1, &pipex, &get_f);
 	parse_cmmd(pipex.cmmd2, &pipex, &get_s);
 	pipex.pid1 = fork();
-	if (pipex.pid1 == 0)
-	{
-		dup2(pipex.tube[1], 1);
-		close(pipex.tube[0]);
-		close(pipex.tube[1]);
-		dup2(pipex.infd, 0);
-		execve(get_f.cmmd, get_f.arg, env);
-		exit (msg_error(E_PRR, 1, NULL));
-	}
+	first_child(&pipex, &get_f, env);
 	pipex.pid2 = fork();
-	if (pipex.pid2 == 0)
-	{
-		dup2(pipex.tube[0], 0);
-		close(pipex.tube[0]);
-		close(pipex.tube[1]);
-		dup2(pipex.outfd, 1);
-		execve(get_s.cmmd, get_s.arg, env);
-		exit (msg_error(E_PRR, 1, NULL));
-	}
+	second_child(&pipex, &get_s, env);
 	free_get(&get_f);
 	free_get(&get_s);
 	close(pipex.tube[0]);
