@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/06/03 09:45:20 by dacortes         ###   ########.fr        #
+#    Updated: 2023/06/07 14:52:32 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ PROGRESS_BAR :=
 
 # =========================== SOURCES ======================================== #
 
-SRC = test.c
+SRC = init.c get.c utils.c pipex.c
 LIBFT = ./libft/
 L_SRC = ./scr
 L_LIB = ./libft/libft.a
@@ -57,7 +57,6 @@ all: dir $(NAME)
 dir:
 	make bonus -C $(LIBFT)
 	-mkdir  $(D_OBJ)
-	-mkdir  $(D_OBJ)/command
 $(D_OBJ)/%.o:$(L_SRC)/%.c
 	$(CC) -MMD $(FLAGS) -c $< -o $@ $(INC)
 	$(eval CURRENT_FILE := $(shell echo $$(($(CURRENT_FILE) + 1)))) \
