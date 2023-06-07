@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 17:33:15 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/03 08:54:56 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/06 19:16:17 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -393,3 +393,44 @@ int main(int ac, char **av, char **env)
 	free_get(&get_s);
 	return (SUCCESS);
 }
+
+/*int		main(int ac, char **av, char **env)
+{
+	t_pipex	pipex;
+	char	*argv[2] = {"ls", NULL};
+	char	*argv2[2] = {"wc", NULL};
+
+	(void)av;
+	if (ac != 5)
+		return (msg_error(E_ARG, 1, NULL));
+	pipex.infd = open("hola.txt", O_RDONLY);
+	pipex.outfd = open("outfile.txt", O_TRUNC | O_CREAT | O_RDWR, 0644);
+	pipe(pipex.tube);
+	pipex.pid1 = fork();
+	if (pipex.pid1 == 0)
+	{
+		dup2(pipex.tube[1], 1);
+		close(pipex.tube[0]);
+		close(pipex.tube[1]);
+		dup2(pipex.infd, 0);
+		execve("/bin/ls", argv, env);
+		exit (msg_error(E_ARG, 1, NULL));
+	}
+	pipex.pid2 = fork();
+	if (pipex.pid2 == 0)
+	{
+		dup2(pipex.tube[0], 0);
+		close(pipex.tube[0]);
+		close(pipex.tube[1]);
+		dup2(pipex.outfd, 1);
+		execve("/usr/bin/wc", argv2, env);
+		exit (msg_error(E_ARG, 1, NULL));
+	}
+	close(pipex.tube[0]);
+	close(pipex.tube[1]);
+	close(pipex.infd);
+	close(pipex.outfd);
+	waitpid(pipex.pid1, NULL, 0);
+	waitpid(pipex.pid2, NULL, 0);
+	return (SUCCESS);
+}*/

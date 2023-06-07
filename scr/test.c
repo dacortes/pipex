@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 08:55:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/06 19:12:31 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/07 12:06:59 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void	free_split(char **split)
 		free(split);
 }
 
-void	free_get(t_get *get, int type)
+void	free_get(t_get *get)
 {
-	if (type == IN && get->paht)
+	if (get->paht)
 		free_split(get->paht);
 	if (get->split)
 		free_split(get->split);
@@ -271,7 +271,6 @@ void	axu_get_arg(t_get *g)
 void	get_arg(char *cmd, char *nd, t_pipex *pipex, t_get *g)
 {
 	g->n_arg = ft_strnstr(cmd, nd, ft_strlen(cmd));
-	g->n_arg = &g->n_arg[ft_strlen(nd)];
 	g->del = ' ';
 	if (ft_strchr(g->n_arg, D_QUOTES))
 		g->del = D_QUOTES;
@@ -289,7 +288,7 @@ void	get_arg(char *cmd, char *nd, t_pipex *pipex, t_get *g)
 	g->i = 0;
 }
 
-void	parse_cmmd(char *cmd, t_pipex *pipex, t_get *get, int type)
+void	parse_cmmd(char *cmd, t_pipex *pipex, t_get *get)
 {
 	if (!close_del(cmd, D_QUOTES) || !close_del(cmd, QUOTES))
 		exit (close_exit(E_CNF, 127, NULL, pipex));
@@ -298,19 +297,8 @@ void	parse_cmmd(char *cmd, t_pipex *pipex, t_get *get, int type)
 		|| access(get->cmmd, X_OK) == ERROR))
 		exit (close_exit(E_CNF, 127, NULL, pipex));
 	get_arg(cmd, get->cmmd, pipex, get);
-	if (type == IN)
-		get_path(pipex, get);
+	get_path(pipex, get);
 }
-
-// void	first_child(t_pipex *pipex, t_get *get, char **env)
-// {
-	
-// }
-
-// void	second_child(t_pipex *pipex, t_get *get, char **env)
-// {
-
-// }
 
 int		main(int ac, char **av, char **env)
 {
@@ -321,25 +309,8 @@ int		main(int ac, char **av, char **env)
 	if (ac != 5)
 		return (msg_error(E_ARG, 1, NULL));
 	init_pipex(&pipex, ac, av, env);
-	parse_cmmd(pipex.cmmd1, &pipex, &get_f, IN);
-	parse_cmmd(pipex.cmmd2, &pipex, &get_s, OUT);
-	free_get(&get_f, IN);
-	free_get(&get_s, OUT);
-	return (SUCCESS);
-}
-
-/*int		main(int ac, char **av, char **env)
-{
-	t_pipex	pipex;
-	char	*argv[2] = {"ls", NULL};
-	char	*argv2[2] = {"wc", NULL};
-
-	(void)av;
-	if (ac != 5)
-		return (msg_error(E_ARG, 1, NULL));
-	pipex.infd = open("hola.txt", O_RDONLY);
-	pipex.outfd = open("outfile.txt", O_TRUNC | O_CREAT | O_RDWR, 0644);
-	pipe(pipex.tube);
+	parse_cmmd(pipex.cmmd1, &pipex, &get_f);
+	parse_cmmd(pipex.cmmd2, &pipex, &get_s);
 	pipex.pid1 = fork();
 	if (pipex.pid1 == 0)
 	{
@@ -347,8 +318,8 @@ int		main(int ac, char **av, char **env)
 		close(pipex.tube[0]);
 		close(pipex.tube[1]);
 		dup2(pipex.infd, 0);
-		execve("/bin/ls", argv, env);
-		exit (msg_error(E_ARG, 1, NULL));
+		execve(get_f.cmmd, get_f.arg, env);
+		exit (msg_error(E_PRR, 1, NULL));
 	}
 	pipex.pid2 = fork();
 	if (pipex.pid2 == 0)
@@ -357,9 +328,11 @@ int		main(int ac, char **av, char **env)
 		close(pipex.tube[0]);
 		close(pipex.tube[1]);
 		dup2(pipex.outfd, 1);
-		execve("/usr/bin/wc", argv2, env);
-		exit (msg_error(E_ARG, 1, NULL));
+		execve(get_s.cmmd, get_s.arg, env);
+		exit (msg_error(E_PRR, 1, NULL));
 	}
+	free_get(&get_f);
+	free_get(&get_s);
 	close(pipex.tube[0]);
 	close(pipex.tube[1]);
 	close(pipex.infd);
@@ -367,4 +340,4 @@ int		main(int ac, char **av, char **env)
 	waitpid(pipex.pid1, NULL, 0);
 	waitpid(pipex.pid2, NULL, 0);
 	return (SUCCESS);
-}*/
+}
