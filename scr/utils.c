@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:28:18 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/07 14:38:36 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/08 11:43:56 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,14 @@ int	close_del(char *str, char delimiter)
 
 int	msg_error(int e, int exit_, char *cm)
 {
-	e == E_ARG && fd_printf(2, R"Error"E": Invalid arguments\n");
-	e == E_MEM && fd_printf(2, R"Error"E": %s Memory allocation error\n", cm);
-	e == E_NSF && fd_printf(2, R"Error"E": %s No such file or directory\n", cm);
-	e == E_PNF && fd_printf(2, R"Error"E": Path not found\n");
-	e == E_PRM && fd_printf(2, R"Error"E": Permissions denied\n");
-	e == E_CNF && fd_printf(2, R"Error"E": Command not found\n");
+	e == E_ARG && fd_printf(2, "bash: Invalid number of arguments\n");
+	e == E_MEM && fd_printf(2, "bash: error trying to allocate memory\n", cm);
+	e == E_NSF && fd_printf(2, "pipex: %s: No such file or directory\n", cm);
+	e == E_PNF && fd_printf(2, "bash: Path not found\n");
+	e == E_PRM && fd_printf(2, "pipex: %s: permissions denied\n", cm);
+	e == E_CNF && fd_printf(2, "pipex: %s: command not found\n", cm);
 	if (e == E_PRR)
-		perror(R"bash"E);
+		perror("bash");
 	return (exit_);
 }
 

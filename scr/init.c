@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:48:24 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/07 14:54:37 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/08 12:35:42 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@ void	parse_file(t_pipex *pipex, int type)
 	if (type == IN)
 	{
 		if (access(pipex->infile, F_OK) == ERROR)
-			exit (msg_error(E_NSF, -2, pipex->infile));
+			exit (msg_error(E_NSF, 0, pipex->infile));
 		if (access(pipex->infile, R_OK) == ERROR)
-			exit (msg_error(E_PRR, -2, pipex->infile));
+			exit (msg_error(E_PRM, 126, pipex->infile));
 		pipex->infd = open (pipex->infile, O_RDONLY);
 		if (pipex->infd < 0)
-			exit (msg_error(E_PRR, pipex->infd, NULL));
+			exit (msg_error(E_PRR, 11, NULL));
 	}
 	if (type == OUT)
 	{
 		pipex->outfd = open(pipex->outfile, O_TRUNC | O_CREAT | O_RDWR, 0644);
 		if (pipex->outfd < 0 && !close(pipex->infd))
-			exit (msg_error(E_PRR, pipex->outfd, NULL));
+			exit (msg_error(E_PRR, 1, NULL));
 	}
 }
 
@@ -42,7 +42,7 @@ void	init_pipex(t_pipex *pipex, int ac, char **av, char **env)
 	pipex->cmmd2 = av[3];
 	pipex->path = find_path(env);
 	if (!pipex->path)
-		exit (msg_error(E_PNF, 1, NULL));
+		exit (msg_error(E_PNF, 0, NULL));
 	if (pipe(pipex->tube) < 0)
 		exit (msg_error(E_PRR, 1, NULL));
 }
@@ -61,7 +61,7 @@ char	*find_path(char **env)
 		i++;
 	}
 	if (!path)
-		return (path);
+		return ("/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin");
 	return (path);
 }
 

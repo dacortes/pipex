@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 08:55:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/07 14:55:52 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/08 11:40:13 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 static void	parse_cmmd(char *cmd, t_pipex *pipex, t_get *get)
 {
 	if (!close_del(cmd, D_QUOTES) || !close_del(cmd, QUOTES))
-		exit (close_exit(E_CNF, 127, NULL, pipex));
+		exit (close_exit(E_CNF, 127, cmd, pipex));
 	get_cmmd(cmd, pipex, get);
 	if (ft_strchr(get->cmmd, '/') && (access(get->cmmd, F_OK) == ERROR
 			|| access(get->cmmd, X_OK) == ERROR))
-		exit (close_exit(E_CNF, 127, NULL, pipex));
+		exit (close_exit(E_CNF, 127, get->cmmd, pipex));
 	get_arg(cmd, get->cmmd, pipex, get);
 	get_path(pipex, get);
 }
@@ -37,7 +37,7 @@ static void	first_child(t_pipex *pipex, t_get *g, char **env)
 		if (dup2(pipex->infd, 0) == ERROR)
 			exit (close_exit(E_PRR, 1, NULL, pipex));
 		execve(g->cmmd, g->arg, env);
-		exit (msg_error(E_PRR, 1, NULL));
+		exit (close_exit(E_CNF, 127, g->cmmd, pipex));
 	}
 }
 
@@ -54,7 +54,7 @@ static void	second_child(t_pipex *pipex, t_get *g, char **env)
 		if (dup2(pipex->outfd, 1) == ERROR)
 			exit (close_exit(E_PRR, 1, NULL, pipex));
 		execve(g->cmmd, g->arg, env);
-		exit (msg_error(E_PRR, 1, NULL));
+		exit (close_exit(E_CNF, 127, g->cmmd, pipex));
 	}
 }
 

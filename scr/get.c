@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:39:58 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/07 14:47:09 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/08 12:38:11 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	get_arg(char *cmd, char *nd, t_pipex *pipex, t_get *g)
 	g->del = ' ';
 	if (ft_strchr(g->n_arg, D_QUOTES))
 		g->del = D_QUOTES;
+	if (ft_strchr(g->n_arg, QUOTES))
+		g->del = QUOTES;
 	g->split = ft_split(g->n_arg, g->del);
 	if (!g->split)
 		exit (close_exit(E_MEM, 1, NULL, pipex));
@@ -95,11 +97,6 @@ void	get_path(t_pipex *pipex, t_get *get)
 	tmp = NULL;
 	cmmd = NULL;
 	get->paht = ft_split(pipex->path, ':');
-	if (!get->paht)
-	{
-		free_split(get->split);
-		exit (close_exit(E_MEM, 1, NULL, pipex));
-	}
 	axu_get_path(tmp, cmmd, pipex, get);
 }
 
