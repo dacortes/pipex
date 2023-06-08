@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/07 19:28:28 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/08 16:57:45 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_get
 	char	**arg;
 	char	*cmmd;
 	char	*n_arg;
+	int		stt;
 	char	del;
 	int		len;
 	int		i;

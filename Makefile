@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/06/07 14:52:32 by dacortes         ###   ########.fr        #
+#    Updated: 2023/06/08 15:41:56 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ PROGRESS_BAR :=
 
 SRC = init.c get.c utils.c pipex.c
 LIBFT = ./libft/
-L_SRC = ./scr
+L_SRC = ./src
 L_LIB = ./libft/libft.a
 INC			=	-I ./inc/\
 				-I ./libft/\

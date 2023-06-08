@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 08:55:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/08 11:40:13 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/08 19:04:02 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ static void	parse_cmmd(char *cmd, t_pipex *pipex, t_get *get)
 	if (!close_del(cmd, D_QUOTES) || !close_del(cmd, QUOTES))
 		exit (close_exit(E_CNF, 127, cmd, pipex));
 	get_cmmd(cmd, pipex, get);
-	if (ft_strchr(get->cmmd, '/') && (access(get->cmmd, F_OK) == ERROR
-			|| access(get->cmmd, X_OK) == ERROR))
+	if (ft_strchr(get->cmmd, '/') && (access(get->cmmd, F_OK) == ERROR))
 		exit (close_exit(E_CNF, 127, get->cmmd, pipex));
+	if (ft_strchr(get->cmmd, '/') && access(get->cmmd, X_OK) == ERROR)
+		exit (close_exit(E_PRM, 126, get->cmmd, pipex));
 	get_arg(cmd, get->cmmd, pipex, get);
 	get_path(pipex, get);
 }
@@ -79,7 +80,7 @@ int	main(int ac, char **av, char **env)
 	close(pipex.tube[1]);
 	close(pipex.infd);
 	close(pipex.outfd);
-	waitpid(pipex.pid1, NULL, 0);
-	waitpid(pipex.pid2, NULL, 0);
-	return (SUCCESS);
+	waitpid(pipex.pid1, &get_f.stt, 0);
+	waitpid(pipex.pid2, &get_s.stt, 0);
+	return (WEXITSTATUS(get_s.stt));
 }

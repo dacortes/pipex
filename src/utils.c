@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:28:18 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/08 11:43:56 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/08 15:26:01 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,14 @@ int	msg_error(int e, int exit_, char *cm)
 	e == E_PRM && fd_printf(2, "pipex: %s: permissions denied\n", cm);
 	e == E_CNF && fd_printf(2, "pipex: %s: command not found\n", cm);
 	if (e == E_PRR)
-		perror("bash");
+		perror("bash: ");
 	return (exit_);
 }
 
 int	close_exit(int error, int exit_, char *cmd, t_pipex *pipex)
 {
+	close(pipex->infd);
+	close(pipex->outfd);
 	close(pipex->tube[0]);
 	close(pipex->tube[1]);
 	return (msg_error(error, exit_, cmd));
