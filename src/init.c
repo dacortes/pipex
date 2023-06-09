@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 14:48:24 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/08 16:01:03 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/08 19:28:27 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	parse_file(t_pipex *pipex, int type)
 			exit (msg_error(E_PRM, 126, pipex->infile));
 		pipex->infd = open (pipex->infile, O_RDONLY);
 		if (pipex->infd < 0)
-			exit (msg_error(E_PRR, 11, NULL));
+			exit (msg_error(E_PRR, 1, NULL));
 	}
 	if (type == OUT)
 	{
