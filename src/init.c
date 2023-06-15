@@ -5,46 +5,34 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/07 14:48:24 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/08 19:28:27 by dacortes         ###   ########.fr       */
+/*   Created: 2023/06/10 09:32:12 by dacortes          #+#    #+#             */
+/*   Updated: 2023/06/15 14:49:27 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"../inc/pipex.h"
 
-void	parse_file(t_pipex *pipex, int type)
+int		parse_open(t_pipex *pip, int type)
 {
 	if (type == IN)
 	{
-		if (access(pipex->infile, F_OK) == ERROR)
-			exit (msg_error(E_NSF, 0, pipex->infile));
-		if (access(pipex->infile, R_OK) == ERROR)
-			exit (msg_error(E_PRM, 126, pipex->infile));
-		pipex->infd = open (pipex->infile, O_RDONLY);
-		if (pipex->infd < 0)
-			exit (msg_error(E_PRR, 1, NULL));
+		if (access(pip->infile, F_OK) == ERROR)
+			return (msg_error(E_NSF, -2, pip->infile));
+		if (access(pip->infile, R_OK) == ERROR)
+			return (msg_error(E_PRR, -2, pip->infile));
+		pip->infd = open(pip->infile, O_RDONLY);
+		if (pip->infd == ERROR)
+			return (1);
 	}
-	if (type == OUT)
+	else if (type == OUT)
 	{
-		pipex->outfd = open(pipex->outfile, O_TRUNC | O_CREAT | O_RDWR, 0644);
-		if (pipex->outfd < 0 && !close(pipex->infd))
-			exit (msg_error(E_PRR, 1, NULL));
+		if  (!access(pip->outfile, F_OK) && access(pip->outfile, W_OK))
+			exit (close_exit(E_PRM, 0, pip->outfile, pip));
+		pip->outfd = open(pip->outfile, O_TRUNC | O_CREAT | O_WRONLY, 0666);
+		if (pip->outfd == ERROR)
+			return (1);
 	}
-}
-
-void	init_pipex(t_pipex *pipex, int ac, char **av, char **env)
-{
-	pipex->infile = av[1];
-	parse_file(pipex, IN);
-	pipex->outfile = av[ac - 1];
-	parse_file(pipex, OUT);
-	pipex->cmmd1 = av[2];
-	pipex->cmmd2 = av[3];
-	pipex->path = find_path(env);
-	if (!pipex->path)
-		exit (msg_error(E_PNF, 0, NULL));
-	if (pipe(pipex->tube) < 0)
-		exit (msg_error(E_PRR, 1, NULL));
+	return (ERROR);
 }
 
 char	*find_path(char **env)
@@ -65,6 +53,27 @@ char	*find_path(char **env)
 	return (path);
 }
 
+void	init_pipex(t_pipex *pip, int ac, char **av, char **env)
+{
+	pip->err = 0;
+	pip->infd = 0;
+	pip->outfile = 0;
+	pip->infile = av[1];
+	pip->cmmd1 = av[2];
+	pip->cmmd2 = av[3];
+	pip->outfile= av[ac - 1];
+	pip->path = find_path(env);
+	if (pipe(pip->tube) == ERROR)
+		exit (msg_error(E_PRR, 1, NULL));
+	pip->err = parse_open(pip, IN);
+	if (pip->err == 1 && !close(pip->tube[0]) && !close(pip->tube[1]))
+		exit (msg_error(E_PRR, 1, NULL));
+	if (pip->err == -1 && pip->infd < 0 && !close(pip->tube[0])
+		&& !close(pip->tube[1]) && !close(pip->infd))
+		exit (msg_error(E_PRR, 1, NULL));
+
+}
+
 int	ignore(char *str, char a, char b, char c)
 {
 	int	i;
@@ -75,7 +84,7 @@ int	ignore(char *str, char a, char b, char c)
 	return (i);
 }
 
-void	get_cmmd(char *cmd, t_pipex *pipex, t_get *g)
+void	get_cmmd(char *cmd, t_pipex *pip, t_get *g)
 {
 	g->len = 0;
 	g->i = ignore(cmd, ' ', D_QUOTES, QUOTES);
@@ -91,7 +100,7 @@ void	get_cmmd(char *cmd, t_pipex *pipex, t_get *g)
 	}
 	g->cmmd = ft_calloc(g->len + 1, sizeof(char));
 	if (!g->cmmd)
-		exit (close_exit(E_MEM, 1, NULL, pipex));
+		exit (close_exit(E_MEM, 1, NULL, pip));
 	g->i = ignore(cmd, ' ', D_QUOTES, QUOTES);
 	g->len = 0;
 	while (cmd[g->i] && cmd[g->i] != ' ' && cmd[g->i] != QUOTES

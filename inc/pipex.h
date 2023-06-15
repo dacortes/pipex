@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/08 16:57:45 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:39:21 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 /* Utils */
 # define D_QUOTES	34
 # define QUOTES		39
+# define BLASH		92
 
 /* Outputs */
 # define SUCCESS 0
@@ -33,7 +34,9 @@
 # define ERROR 	-1
 # define E_EXIT  1
 
+
 /* Error */
+# define E_SPC -2
 # define E_ARG 1
 # define E_MEM 2
 # define E_NSF 3
@@ -55,8 +58,6 @@
 
 // ================================= STRUCTURES ============================= //
 
-/* structure find */
-
 /* test estruc */
 typedef struct s_pipex
 {
@@ -70,6 +71,7 @@ typedef struct s_pipex
 	int		tube[2];
 	int		infd;
 	int		outfd;
+	int		err;
 }	t_pipex;
 /* get_arg */
 typedef struct s_get
@@ -79,8 +81,9 @@ typedef struct s_get
 	char	**arg;
 	char	*cmmd;
 	char	*n_arg;
-	int		stt;
 	char	del;
+	int		err;
+	int		stt;
 	int		len;
 	int		i;
 	int		j;
@@ -102,8 +105,10 @@ void	get_path(t_pipex *pipex, t_get *get);
 void	axu_get_path(char *tmp, char *cmmd, t_pipex *pipex, t_get *get);
 /* init.c */
 void	parse_file(t_pipex *pipex, int type);
-void	init_pipex(t_pipex *pipex, int ac, char **av, char **env);
+void	init_pipex(t_pipex *pip, int ac, char **av, char **env);
 char	*find_path(char **env);
 int		ignore(char *str, char a, char b, char c);
 void	get_cmmd(char *cmd, t_pipex *pipex, t_get *g);
+/* tets init */
+int		parse_open(t_pipex *pip, int type);
 #endif
