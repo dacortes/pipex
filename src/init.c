@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 09:32:12 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/15 16:54:49 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/15 17:16:25 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ void	init_pipex(t_pipex *pip, int ac, char **av, char **env)
 
 int	ignore(char *str, char a, char b, char c)
 {
-	int	i;
-	char d;
+	int		i;
+	char	d;
 
 	i = 0;
 	d = '\\';
