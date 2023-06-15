@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/06/10 16:04:43 by dacortes         ###   ########.fr        #
+#    Updated: 2023/06/15 17:17:55 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,11 +72,12 @@ $(NAME): $(OBJ)
 fclean: clean
 	$(RM) $(NAME)
 	make fclean -C $(LIBFT)
-	echo "✅ ==== $(P)$(ligth)pipex object files cleaned!$(E) ==== ✅"
+	echo "✅ ==== $(P)$(ligth)pipex executable files and name cleaned!$(E) ==== ✅\n"
+	
 clean:
 	$(RM) $(D_OBJ)
 	make clean -C $(LIBFT)
-	echo "✅ ==== $(P)$(ligth)pipex executable files and name cleaned!$(E) ==== ✅\n"
+	echo "✅ ==== $(P)$(ligth)pipex object files cleaned!$(E) ==== ✅"
 re: fclean all
 TOTAL_FILES := $(words $(SRC))
 .SILENT:
