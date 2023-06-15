@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 09:29:05 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/15 15:50:33 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/15 16:58:13 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,16 @@ int	is_bin(char *cmd, t_get *g)
 {
 	if (ft_strnstr(cmd, "./", ft_strlen(cmd)) && !close_del(cmd, ' '))
 	{
-		if ((!close_del(cmd, D_QUOTES) || !close_del(cmd, QUOTES)))
+		if ((!close_del(cmd, D_QUOTES) || !close_del(cmd, QUOTES)
+			|| !close_del(cmd, '\\')))
 			exit (msg_error(E_CNF, 127, g->cmmd));
 		return (msg_error(E_CNF, E_SPC, g->cmmd));
 	}
 	else
 	{
-		if ((!close_del(cmd, D_QUOTES) || !close_del(cmd, QUOTES)))
-			exit (msg_error(E_CNF, 127, g->cmmd));
+		if ((!close_del(cmd, D_QUOTES) || !close_del(cmd, QUOTES)
+			|| !close_del(cmd, '\\')))
+			return (msg_error(E_CNF, -2, g->cmmd));
 		else if (ft_strchr(cmd, '/') && access(g->cmmd, F_OK))
 			return (msg_error(E_CNF, 127, g->cmmd));
 		else if (ft_strchr(cmd, '/') && access(g->cmmd, X_OK))

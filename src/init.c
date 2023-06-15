@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 09:32:12 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/15 15:49:46 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/15 16:54:49 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,11 @@ void	init_pipex(t_pipex *pip, int ac, char **av, char **env)
 int	ignore(char *str, char a, char b, char c)
 {
 	int	i;
+	char d;
 
 	i = 0;
-	while (str[i] && (str[i] == a || str[i] == b || str[i] == c))
+	d = '\\';
+	while (str[i] && (str[i] == a || str[i] == b || str[i] == c || str[i] == d))
 		i++;
 	return (i);
 }
@@ -103,6 +105,6 @@ void	get_cmmd(char *cmd, t_pipex *pip, t_get *g)
 	g->i = ignore(cmd, ' ', D_QUOTES, QUOTES);
 	g->len = 0;
 	while (cmd[g->i] && cmd[g->i] != ' ' && cmd[g->i] != QUOTES
-		&& cmd[g->i] != D_QUOTES)
+		&& cmd[g->i] != D_QUOTES && cmd[g->i] != '\\')
 		g->cmmd[g->len++] = cmd[g->i++];
 }
