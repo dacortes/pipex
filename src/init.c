@@ -6,13 +6,13 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 09:32:12 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/15 14:49:27 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:49:46 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"../inc/pipex.h"
 
-int		parse_open(t_pipex *pip, int type)
+int	parse_open(t_pipex *pip, int type)
 {
 	if (type == IN)
 	{
@@ -26,7 +26,7 @@ int		parse_open(t_pipex *pip, int type)
 	}
 	else if (type == OUT)
 	{
-		if  (!access(pip->outfile, F_OK) && access(pip->outfile, W_OK))
+		if (!access(pip->outfile, F_OK) && access(pip->outfile, W_OK))
 			exit (close_exit(E_PRM, 0, pip->outfile, pip));
 		pip->outfd = open(pip->outfile, O_TRUNC | O_CREAT | O_WRONLY, 0666);
 		if (pip->outfd == ERROR)
@@ -61,7 +61,7 @@ void	init_pipex(t_pipex *pip, int ac, char **av, char **env)
 	pip->infile = av[1];
 	pip->cmmd1 = av[2];
 	pip->cmmd2 = av[3];
-	pip->outfile= av[ac - 1];
+	pip->outfile = av[ac - 1];
 	pip->path = find_path(env);
 	if (pipe(pip->tube) == ERROR)
 		exit (msg_error(E_PRR, 1, NULL));
@@ -71,7 +71,6 @@ void	init_pipex(t_pipex *pip, int ac, char **av, char **env)
 	if (pip->err == -1 && pip->infd < 0 && !close(pip->tube[0])
 		&& !close(pip->tube[1]) && !close(pip->infd))
 		exit (msg_error(E_PRR, 1, NULL));
-
 }
 
 int	ignore(char *str, char a, char b, char c)

@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/15 15:39:21 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:50:52 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@
 # define TRUE	 1
 # define ERROR 	-1
 # define E_EXIT  1
-
 
 /* Error */
 # define E_SPC -2

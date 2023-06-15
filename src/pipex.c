@@ -6,13 +6,13 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 09:29:05 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/15 15:40:26 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:50:33 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"../inc/pipex.h"
 
-int is_bin(char *cmd, t_get *g)
+int	is_bin(char *cmd, t_get *g)
 {
 	if (ft_strnstr(cmd, "./", ft_strlen(cmd)) && !close_del(cmd, ' '))
 	{
@@ -98,10 +98,10 @@ void	second_child(t_pipex *pip, t_get *g, char **env)
 
 int	main(int ac, char **av, char **env)
 {
-	t_pipex pip;
+	t_pipex	pip;
 	t_get	first;
 	t_get	second;
-	
+
 	if (ac != 5)
 		return (msg_error(E_ARG, 1, NULL));
 	init_pipex(&pip, ac, av, env);
