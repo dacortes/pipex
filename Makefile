@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/06/15 17:17:55 by dacortes         ###   ########.fr        #
+#    Updated: 2023/06/19 11:03:57 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,8 @@ SRC = init.c get.c utils.c pipex.c
 LIBFT = ./libft/
 L_SRC = ./src
 L_LIB = ./libft/libft.a
-INC			=	-I ./inc/\
-				-I ./libft/\
+INC		=	-I ./inc/\
+			-I ./libft/\
 
 # =========================== DIRECTORIES ==================================== #
 
