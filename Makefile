@@ -6,7 +6,7 @@
 #    By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/28 17:04:05 by dacortes          #+#    #+#              #
-#    Updated: 2023/06/19 11:03:57 by dacortes         ###   ########.fr        #
+#    Updated: 2023/06/23 15:02:48 by dacortes         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,13 +55,18 @@ italic = \033[3m
 all: dir $(NAME)
 -include $(DEP)
 dir:
-	make bonus -C $(LIBFT)
+	make -C $(LIBFT)
 	-mkdir  $(D_OBJ)
 $(D_OBJ)/%.o:$(L_SRC)/%.c
 	$(CC) -MMD $(FLAGS) -c $< -o $@ $(INC)
 	$(eval CURRENT_FILE := $(shell echo $$(($(CURRENT_FILE) + 1)))) \
 	$(eval PROGRESS_BAR := $(shell awk "BEGIN { printf \"%.0f\", $(CURRENT_FILE)*100/$(TOTAL_FILES) }")) \
-	printf "$B$(ligth)⏳Compiling pipex:$E $(ligth)%-30s [%-50s] %d%%\r" "$<..." "$(shell printf '=%.0s' {1..$(shell echo "$(PROGRESS_BAR)/2" | bc)})" $(PROGRESS_BAR)
+	printf "\r$B$(ligth)⏳Compiling libft:$E $(ligth)%-30s [$(CURRENT_FILE)/$(TOTAL_FILES)] [%-50s] %3d%%\033[K" \
+	"$<..." "$(shell printf '$(G)█%.0s$(E)$(ligth)' {1..$(shell echo "$(PROGRESS_BAR)/2" | bc)})" $(PROGRESS_BAR)
+	
+	@if [ $(PROGRESS_BAR) = 100 ]; then \
+		echo "$(B) All done$(E)"; \
+	fi
 $(NAME): $(OBJ)
 	$(CC) $(FLAGS) $(OBJ) $(L_LIB) -o $(NAME) $(INC)
 	echo "\n\n✅ ==== $(B)$(ligth)Project pipex compiled!$(E) ==== ✅"
