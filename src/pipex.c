@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 09:29:05 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/19 11:26:45 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/23 11:50:28 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,18 @@ int	is_bin(char *cmd, t_get *g)
 
 int	parse_cmd(char *cmd, t_pipex *pip, t_get *g, int type)
 {
+	pip->cmd = cmd;
+	g->f_err = FALSE;
 	get_cmmd(cmd, pip, g);
 	get_arg(cmd, g->cmmd, pip, g);
+	if (cmd[0] == QUOTES)
+	{
+		g->j = 1;
+		g->i = 0;
+		while (cmd[g->j] && cmd[g->j] != QUOTES)
+			g->cmmd[g->i++] = cmd[g->j++];
+		g->f_err = TRUE;
+	}
 	get_path(pip, g);
 	if (type == IN)
 		g->err = is_bin(cmd, g);
@@ -43,9 +53,9 @@ int	parse_cmd(char *cmd, t_pipex *pip, t_get *g, int type)
 	{
 		if (!close_del(cmd, D_QUOTES) || !close_del(cmd, QUOTES))
 			exit (close_exit(E_CNF, 127, cmd, pip));
-		else if (ft_strchr(cmd, '/') && access(g->cmmd, F_OK))
+		else if (ft_strchr(cmd, '/') && access(g->cmmd , F_OK))
 			exit (close_exit(E_CNF, 127, cmd, pip));
-		else if (ft_strchr(cmd, '/') && access(g->cmmd, X_OK))
+		else if (ft_strchr(cmd, '/') && access(g->cmmd , X_OK))
 			exit (close_exit(E_PRM, 126, cmd, pip));
 	}
 	return (SUCCESS);
@@ -55,8 +65,6 @@ void	first_child(t_pipex *pipex, t_get *g, char **env)
 {
 	if (pipex->pid1 == ERROR)
 		exit (close_exit(E_PRR, 1, NULL, pipex));
-	// if (pipex->err == -2 || g->err == -2)
-	// 	close(pipex->infd);
 	else if (pipex->err != -2 && g->err != -2)
 	{
 		if (dup2(pipex->tube[1], 1) == ERROR)
@@ -73,7 +81,6 @@ void	first_child(t_pipex *pipex, t_get *g, char **env)
 
 void	second_child(t_pipex *pip, t_get *g, char **env)
 {
-	ft_printf(R"%s"E, g->arg[1]);
 	pip->err = parse_open(pip, OUT);
 	if (pip->err == 1 && !close(pip->tube[0]) && !close(pip->tube[1]))
 		exit (msg_error(E_PRR, 1, NULL));
@@ -93,7 +100,7 @@ void	second_child(t_pipex *pip, t_get *g, char **env)
 		execve(g->cmmd, g->arg, env);
 		exit (close_exit(E_CNF, 127, g->cmmd, pip));
 	}
-	// exit(1);
+	exit(1);
 }
 
 int	main(int ac, char **av, char **env)
@@ -105,8 +112,8 @@ int	main(int ac, char **av, char **env)
 	if (ac != 5)
 		return (msg_error(E_ARG, 1, NULL));
 	init_pipex(&pip, ac, av, env);
-	parse_cmd(pip.cmmd1, &pip, &first, IN);
-	parse_cmd(pip.cmmd2, &pip, &second, OUT);
+	parse_cmd(av[2], &pip, &first, IN);
+	parse_cmd(av[3], &pip, &second, OUT);
 	pip.pid1 = fork();
 	if (pip.pid1 == 0)
 		first_child(&pip, &first, env);

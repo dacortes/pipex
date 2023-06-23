@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 09:55:58 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/10 17:44:43 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/23 11:29:11 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	free_get(t_get *get)
 		free_split(get->split);
 	if (get->arg)
 		free(get->arg);
-	if (get->cmmd)
+	if (get->cmmd && !get->f_err)
 		free(get->cmmd);
 }
 

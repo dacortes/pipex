@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:15:07 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/15 16:55:03 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/23 11:27:14 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_pipex
 	char	*outfile;
 	char	*cmmd1;
 	char	*cmmd2;
+	char	*cmd;
 	int		tube[2];
 	int		infd;
 	int		outfd;
@@ -81,6 +82,7 @@ typedef struct s_get
 	char	*cmmd;
 	char	*n_arg;
 	char	del;
+	int		f_err;
 	int		err;
 	int		stt;
 	int		len;
