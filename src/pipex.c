@@ -6,7 +6,7 @@
 /*   By: dacortes <dacortes@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 09:29:05 by dacortes          #+#    #+#             */
-/*   Updated: 2023/06/23 11:50:28 by dacortes         ###   ########.fr       */
+/*   Updated: 2023/06/29 18:31:40 by dacortes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	parse_cmd(char *cmd, t_pipex *pip, t_get *g, int type)
 	{
 		if (!close_del(cmd, D_QUOTES) || !close_del(cmd, QUOTES))
 			exit (close_exit(E_CNF, 127, cmd, pip));
-		else if (ft_strchr(cmd, '/') && access(g->cmmd , F_OK))
+		else if (ft_strchr(cmd, '/') && access(g->cmmd, F_OK))
 			exit (close_exit(E_CNF, 127, cmd, pip));
-		else if (ft_strchr(cmd, '/') && access(g->cmmd , X_OK))
+		else if (ft_strchr(cmd, '/') && access(g->cmmd, X_OK))
 			exit (close_exit(E_PRM, 126, cmd, pip));
 	}
 	return (SUCCESS);
